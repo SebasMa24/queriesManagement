@@ -25,6 +25,6 @@ public class WarehouseId {
         name = "code_warehouse",
         nullable = false
     )
-    private Short codeWarehouse;
+    private Short code;
     
 }

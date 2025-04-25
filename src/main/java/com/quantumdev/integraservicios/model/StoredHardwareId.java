@@ -35,6 +35,6 @@ public class StoredHardwareId {
         name = "code_storedhw",
         nullable = false
     )
-    private Short codeStoredHardware;
+    private Short code;
     
 }

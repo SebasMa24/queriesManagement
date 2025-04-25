@@ -25,6 +25,6 @@ public class SpaceId {
         name = "code_space",
         nullable = false
     )
-    private Short codeSpace;
+    private Short code;
     
 }

@@ -76,14 +76,14 @@ public class ReservedSpace {
 
     @NotEmpty
     @Column(
-        name = "resstart_resspace",
+        name = "start_resspace",
         nullable = false
     )
     private Instant startDate;
 
     @NotEmpty
     @Column(
-        name = "resend_resspace",
+        name = "end_resspace",
         nullable = false
     )
     private Instant endDate;

@@ -15,9 +15,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @Table(
-        name = "Role",
-        uniqueConstraints = @UniqueConstraint(columnNames = "name")
-    )
+    name = "Role",
+    uniqueConstraints = @UniqueConstraint(columnNames = "name")
+)
 public class Role {
 
     @Id

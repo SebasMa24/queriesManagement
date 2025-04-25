@@ -63,10 +63,10 @@ public class ReservedHardware {
         optional = false
     )
     @Column(
-        name = "requestor_reshw",
+        name = "requester_reshw",
         nullable = false
     )
-    private User requestor;
+    private User requester;
 
     @NotEmpty
     @ManyToOne(
@@ -81,14 +81,14 @@ public class ReservedHardware {
 
     @NotEmpty
     @Column(
-        name = "resstart_reshw",
+        name = "start_reshw",
         nullable = false
     )
     private Instant startDate;
 
     @NotEmpty
     @Column(
-        name = "resend_reshw",
+        name = "end_reshw",
         nullable = false
     )
     private Instant endDate;

@@ -28,7 +28,7 @@ public class Building {
         name = "code_building",
         nullable = false
     )
-    private Byte code;
+    private Short code;
 
     @NotEmpty
     @ManyToOne(

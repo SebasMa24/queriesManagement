@@ -26,7 +26,7 @@ public class Space {
         optional = false
     )
     @Column(
-        name = "spacetype_space",
+        name = "type_space",
         nullable = false
     )
     private SpaceType type;
@@ -44,10 +44,18 @@ public class Space {
 
     @NotEmpty
     @Column(
+        name = "name_space",
+        length = 64,
+        nullable = false
+    )
+    private String name;
+
+    @NotEmpty
+    @Column(
         name = "capacity_space",
         nullable = false
     )
-    private Byte capacity;
+    private Short capacity;
 
     @NotEmpty
     @Column(
@@ -56,5 +64,12 @@ public class Space {
         nullable = false
     )
     private String schedule;
+
+    @Column(
+        name = "desc_space",
+        length = 64,
+        nullable = true
+    )
+    private String description;
 
 }

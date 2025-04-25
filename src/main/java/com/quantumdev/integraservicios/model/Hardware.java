@@ -35,7 +35,7 @@ public class Hardware {
         optional = false
     )
     @Column(
-        name = "hwtype_hardware",
+        name = "type_hardware",
         nullable = false
     )
     private HardwareType type;
@@ -55,5 +55,12 @@ public class Hardware {
         nullable = false
     )
     private String schedule;
+
+    @Column(
+        name = "desc_hardware",
+        length = 64,
+        nullable = true
+    )
+    private String description;
     
 }
