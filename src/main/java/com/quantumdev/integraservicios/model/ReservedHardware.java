@@ -11,8 +11,6 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 
-import jakarta.validation.constraints.NotEmpty;
-
 import lombok.Getter;
 import lombok.Setter;
 
@@ -26,14 +24,12 @@ import lombok.Setter;
 public class ReservedHardware {
 
     @Id
-    @NotEmpty
     @Column(
         name = "code_reshw",
         nullable = false
     )
     private Long code;
 
-    @NotEmpty
     @ManyToOne(
         targetEntity = StoredHardware.class,
         optional = false
@@ -57,36 +53,32 @@ public class ReservedHardware {
     })
     private StoredHardware storedHardware;
 
-    @NotEmpty
     @ManyToOne(
         targetEntity = User.class,
         optional = false
     )
-    @Column(
+    @JoinColumn(
         name = "requester_reshw",
         nullable = false
     )
     private User requester;
 
-    @NotEmpty
     @ManyToOne(
         targetEntity = User.class,
         optional = false
     )
-    @Column(
+    @JoinColumn(
         name = "manager_reshw",
         nullable = false
     )
     private User manager;
 
-    @NotEmpty
     @Column(
         name = "start_reshw",
         nullable = false
     )
     private Instant startDate;
 
-    @NotEmpty
     @Column(
         name = "end_reshw",
         nullable = false

@@ -3,6 +3,7 @@ package com.quantumdev.integraservicios.model;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
@@ -17,7 +18,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Table(
-    name = "User",
+    name = "AppUser",
     uniqueConstraints = @UniqueConstraint(columnNames = "email_user")
 )
 public class User {
@@ -32,12 +33,11 @@ public class User {
     )
     private String email;
 
-    @NotEmpty
     @ManyToOne(
         targetEntity = Role.class,
         optional = false
     )
-    @Column(
+    @JoinColumn(
         name = "role_user",
         nullable = false
     )
@@ -62,7 +62,6 @@ public class User {
     )
     private String name;
 
-    @NotEmpty
     @Column(
         name = "phone_user",
         nullable = false

@@ -11,8 +11,6 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 
-import jakarta.validation.constraints.NotEmpty;
-
 import lombok.Getter;
 import lombok.Setter;
 
@@ -26,14 +24,12 @@ import lombok.Setter;
 public class ReservedSpace {
     
     @Id
-    @NotEmpty
     @Column(
         name = "code_resspace",
         nullable = false
     )
     private Long code;
     
-    @NotEmpty
     @ManyToOne(
         targetEntity = Space.class,
         optional = false
@@ -52,36 +48,32 @@ public class ReservedSpace {
     })
     private Space space;
 
-    @NotEmpty
     @ManyToOne(
         targetEntity = User.class,
         optional = false
     )
-    @Column(
+    @JoinColumn(
         name = "requester_resspace",
         nullable = false
     )
     private User requester;
 
-    @NotEmpty
     @ManyToOne(
         targetEntity = User.class,
         optional = false
     )
-    @Column(
+    @JoinColumn(
         name = "manager_resspace",
         nullable = false
     )
     private User manager;
 
-    @NotEmpty
     @Column(
         name = "start_resspace",
         nullable = false
     )
     private Instant startDate;
 
-    @NotEmpty
     @Column(
         name = "end_resspace",
         nullable = false

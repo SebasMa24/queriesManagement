@@ -3,6 +3,7 @@ package com.quantumdev.integraservicios.model;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
@@ -23,21 +24,18 @@ import lombok.Setter;
 public class Building {
 
     @Id
-    @NotEmpty
     @Column(
         name = "code_building",
         nullable = false
     )
     private Short code;
 
-    @NotEmpty
     @ManyToOne(
         targetEntity = Faculty.class,
         optional = false
     )
-    @Column(
+    @JoinColumn(
         name = "faculty_building",
-        length = 32,
         nullable = false
     )
     private Faculty faculty;
@@ -50,7 +48,6 @@ public class Building {
     )
     private String name;
 
-    @NotEmpty
     @Column(
         name = "phone_building",
         nullable = false

@@ -6,12 +6,9 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinColumns;
 import jakarta.persistence.ManyToOne;
 
-import jakarta.validation.constraints.NotEmpty;
-
 @Embeddable
 public class StoredHardwareId {
 
-    @NotEmpty
     @ManyToOne(
         targetEntity = Warehouse.class,
         optional = false
@@ -30,7 +27,6 @@ public class StoredHardwareId {
     })
     private Warehouse warehouse;
 
-    @NotEmpty
     @Column(
         name = "code_storedhw",
         nullable = false

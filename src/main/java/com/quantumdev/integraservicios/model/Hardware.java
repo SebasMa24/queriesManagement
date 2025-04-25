@@ -8,6 +8,7 @@ import java.util.List;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
@@ -28,19 +29,17 @@ import lombok.Setter;
 public class Hardware {
 
     @Id
-    @NotEmpty
     @Column(
         name = "code_hardware",
         nullable = false
     )
     private Long code;
 
-    @NotEmpty
     @ManyToOne(
         targetEntity = HardwareType.class,
         optional = false
     )
-    @Column(
+    @JoinColumn(
         name = "type_hardware",
         nullable = false
     )
