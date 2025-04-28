@@ -8,12 +8,18 @@ import jakarta.persistence.UniqueConstraint;
 
 import jakarta.validation.constraints.NotEmpty;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Table(
     name = "HardwareType",
     uniqueConstraints = @UniqueConstraint(columnNames = "name_hardwareType")

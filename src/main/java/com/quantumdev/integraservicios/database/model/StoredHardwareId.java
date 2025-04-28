@@ -6,7 +6,14 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinColumns;
 import jakarta.persistence.ManyToOne;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+
 @Embeddable
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class StoredHardwareId {
 
     @ManyToOne(

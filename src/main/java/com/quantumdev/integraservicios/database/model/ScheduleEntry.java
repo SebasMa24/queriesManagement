@@ -6,6 +6,7 @@ import java.time.LocalTime;
 import java.util.Map;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,6 +15,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class ScheduleEntry {
 
     /** Map for the DayOfWeek enum values to their corresponding characters. */
