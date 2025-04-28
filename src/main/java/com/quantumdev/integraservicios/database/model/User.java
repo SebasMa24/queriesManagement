@@ -17,6 +17,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * Entity class representing an User in the database.
+ * This class is mapped to the "AppUser" table and contains fields for user details.
+ * It includes validation annotations for data integrity and constraints.
+ * @author Nicolás Sabogal
+ */
 @Entity
 @Getter
 @Setter

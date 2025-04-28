@@ -14,6 +14,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * Entity class representing a Faculty in the database.
+ * This class is mapped to the "Faculty" table and contains fields for faculty details.
+ * It includes validation annotations for data integrity and constraints.
+ * @author Nicolás Sabogal
+ */
 @Entity
 @Getter
 @Setter

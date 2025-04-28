@@ -11,6 +11,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * Logical class representing a schedule entry to map the schedule on various objects in the database.
+ * @author Nicolás Sabogal
+ */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -76,8 +80,11 @@ public class ScheduleEntry {
     }
 
 
+    /** The day of the week for the schedule entry. */
     private DayOfWeek day;
+    /** The start time of the schedule entry. This must be an exact hour. */
     private LocalTime start;
+    /** The end time of the schedule entry. This must be an exact hour. */
     private LocalTime end;
 
     /**
@@ -87,6 +94,7 @@ public class ScheduleEntry {
      * The day of the week is represented by a single character:
      * M - Monday, T - Tuesday, W - Wednesday, H - Thursday,
      * F - Friday, S - Saturday, U - Sunday.
+     * @return A string representation of the schedule entry.
      */
     public String toString() {
         // Convert the DayOfWeek enum value to a character.

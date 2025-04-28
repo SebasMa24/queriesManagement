@@ -14,6 +14,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * Entity class representing a SpaceType in the database.
+ * This class is mapped to the "SpaceType" table and contains fields for space type details.
+ * It includes validation annotations for data integrity and constraints.
+ * @author Nicolás Sabogal
+ */
 @Entity
 @Getter
 @Setter

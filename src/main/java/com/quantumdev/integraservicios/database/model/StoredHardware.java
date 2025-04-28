@@ -12,6 +12,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * Entity class representing a StoredHardware in the database.
+ * This class is mapped to the "StoredHardware" table and contains fields for stored hardware details.
+ * It includes validation annotations for data integrity and constraints.
+ * @author Nicolás Sabogal
+ */
 @Entity
 @Getter
 @Setter

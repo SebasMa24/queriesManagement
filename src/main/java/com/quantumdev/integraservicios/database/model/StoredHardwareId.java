@@ -10,6 +10,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
+/**
+ * Class representing the composite key for the StoredHardware entity.
+ * This class is used to uniquely identify a StoredHardware by its warehouse and code.
+ * It implements Serializable for use as a composite key in JPA.
+ * @author Nicolás Sabogal
+ */
 @Embeddable
 @NoArgsConstructor
 @AllArgsConstructor

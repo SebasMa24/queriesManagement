@@ -8,6 +8,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
+/**
+ * Entity class representing a Warehouse in the database.
+ * This class is mapped to the "Warehouse" table and contains fields for warehouse details.
+ * It includes validation annotations for data integrity and constraints.
+ * @author Nicolás Sabogal
+ */
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
