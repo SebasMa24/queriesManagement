@@ -1,4 +1,4 @@
-package com.quantumdev.integraservicios.model;
+package com.quantumdev.integraservicios.database.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -18,62 +18,57 @@ import lombok.Setter;
 @Getter
 @Setter
 @Table(
-    name = "AppUser",
-    uniqueConstraints = @UniqueConstraint(columnNames = "email_user")
+    name = "Building",
+    uniqueConstraints = @UniqueConstraint(columnNames = "code_building")
 )
-public class User {
+public class Building {
 
     @Id
-    @Email
-    @NotEmpty
     @Column(
-        name = "email_user",
-        length = 64,
+        name = "code_building",
         nullable = false
     )
-    private String email;
+    private Short code;
 
     @ManyToOne(
-        targetEntity = Role.class,
+        targetEntity = Faculty.class,
         optional = false
     )
     @JoinColumn(
-        name = "role_user",
+        name = "faculty_building",
         nullable = false
     )
-    private Role role;
+    private Faculty faculty;
 
     @NotEmpty
     @Column(
-        name = "pass_user",
-        length = 32,
-        nullable = false
-    )
-    private String password;
-
-    @Column(name = "code_user")
-    private Long code;
-
-    @NotEmpty
-    @Column(
-        name = "name_user",
-        length = 32,
+        name = "name_building",
+        length = 64,
         nullable = false
     )
     private String name;
 
     @Column(
-        name = "phone_user",
+        name = "phone_building",
         nullable = false
     )
     private Long phone;
 
     @NotEmpty
     @Column(
-        name = "address_user",
+        name = "address_building",
         length = 64,
         nullable = false
     )
     private String address;
+
+    @Email
+    @NotEmpty
+    @Column(
+        name = "email_building",
+        length = 64,
+        nullable = false
+    )
+    private String email;
 
 }

@@ -1,12 +1,12 @@
-package com.quantumdev.integraservicios.model;
+package com.quantumdev.integraservicios.database.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
-
-import jakarta.validation.constraints.NotEmpty;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -15,22 +15,22 @@ import lombok.Setter;
 @Getter
 @Setter
 @Table(
-    name = "HardwareType",
-    uniqueConstraints = @UniqueConstraint(columnNames = "name_hardwareType")
+    name = "Role",
+    uniqueConstraints = @UniqueConstraint(columnNames = "name")
 )
-public class HardwareType {
+public class Role {
 
     @Id
-    @NotEmpty
+    @Enumerated(EnumType.STRING)
     @Column(
-        name = "name_hardwareType",
+        name = "name_role",
         length = 32,
         nullable = false
     )
-    private String name;
+    private ERole name;
 
     @Column(
-        name = "desc_hardwareType",
+        name = "desc_role",
         length = 64
     )
     private String description;

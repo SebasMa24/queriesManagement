@@ -3,10 +3,10 @@ package com.quantumdev.integraservicios.queriesManagement.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.quantumdev.integraservicios.model.ReservedHardware;
-import com.quantumdev.integraservicios.model.ReservedSpace;
-import com.quantumdev.integraservicios.model.Space;
-import com.quantumdev.integraservicios.model.StoredHardware;
+import com.quantumdev.integraservicios.database.model.ReservedHardware;
+import com.quantumdev.integraservicios.database.model.ReservedSpace;
+import com.quantumdev.integraservicios.database.model.Space;
+import com.quantumdev.integraservicios.database.model.StoredHardware;
 
 import java.util.List;
 import java.time.Instant;

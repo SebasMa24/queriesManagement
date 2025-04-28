@@ -1,4 +1,4 @@
-package com.quantumdev.integraservicios.model;
+package com.quantumdev.integraservicios.database.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;

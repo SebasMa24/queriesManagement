@@ -1,4 +1,4 @@
-package com.quantumdev.integraservicios.model;
+package com.quantumdev.integraservicios.database.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -15,22 +15,22 @@ import lombok.Setter;
 @Getter
 @Setter
 @Table(
-    name = "SpaceType",
-    uniqueConstraints = @UniqueConstraint(columnNames = "name_spaceType")
+    name = "Faculty",
+    uniqueConstraints = @UniqueConstraint(columnNames = "name_faculty")
 )
-public class SpaceType {
+public class Faculty {
 
     @Id
     @NotEmpty
     @Column(
-        name = "name_spaceType",
+        name = "name_faculty",
         length = 32,
         nullable = false
     )
     private String name;
 
     @Column(
-        name = "desc_spaceType",
+        name = "desc_faculty",
         length = 64
     )
     private String description;

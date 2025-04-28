@@ -1,12 +1,12 @@
-package com.quantumdev.integraservicios.model;
+package com.quantumdev.integraservicios.database.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+
+import jakarta.validation.constraints.NotEmpty;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -15,22 +15,22 @@ import lombok.Setter;
 @Getter
 @Setter
 @Table(
-    name = "Role",
-    uniqueConstraints = @UniqueConstraint(columnNames = "name")
+    name = "State",
+    uniqueConstraints = @UniqueConstraint(columnNames = "name_state")
 )
-public class Role {
+public class State {
 
     @Id
-    @Enumerated(EnumType.STRING)
+    @NotEmpty
     @Column(
-        name = "name_role",
+        name = "name_state",
         length = 32,
         nullable = false
     )
-    private ERole name;
+    private String name;
 
     @Column(
-        name = "desc_role",
+        name = "desc_state",
         length = 64
     )
     private String description;

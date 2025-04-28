@@ -8,15 +8,15 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-import com.quantumdev.integraservicios.model.ERole;
-import com.quantumdev.integraservicios.model.Role;
-import com.quantumdev.integraservicios.model.User;
-import com.quantumdev.integraservicios.repository.RoleRepository;
-import com.quantumdev.integraservicios.repository.UserRepository;
+import com.quantumdev.integraservicios.database.model.ERole;
+import com.quantumdev.integraservicios.database.model.Role;
+import com.quantumdev.integraservicios.database.model.User;
+import com.quantumdev.integraservicios.database.repository.RoleRepository;
+import com.quantumdev.integraservicios.database.repository.UserRepository;
 
 @SpringBootApplication
-@EnableJpaRepositories("com.quantumdev.integraservicios.repository")
-@EntityScan("com.quantumdev.integraservicios.model")
+@EnableJpaRepositories("com.quantumdev.integraservicios.database.repository")
+@EntityScan("com.quantumdev.integraservicios.database.model")
 public class QueriesManagementApplication {
 
 	@Autowired

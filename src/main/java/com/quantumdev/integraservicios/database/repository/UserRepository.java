@@ -1,9 +1,9 @@
-package com.quantumdev.integraservicios.repository;
+package com.quantumdev.integraservicios.database.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.quantumdev.integraservicios.model.User;
+import com.quantumdev.integraservicios.database.model.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, String> {
