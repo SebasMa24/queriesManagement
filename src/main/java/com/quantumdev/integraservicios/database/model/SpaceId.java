@@ -7,7 +7,9 @@ import jakarta.persistence.ManyToOne;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * Class representing the composite key for the Space entity.
@@ -16,6 +18,8 @@ import lombok.NoArgsConstructor;
  * @author Nicolás Sabogal
  */
 @Embeddable
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
