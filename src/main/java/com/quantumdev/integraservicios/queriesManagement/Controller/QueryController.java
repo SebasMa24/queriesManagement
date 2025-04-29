@@ -7,59 +7,149 @@ import com.quantumdev.integraservicios.database.model.ReservedHardware;
 import com.quantumdev.integraservicios.database.model.ReservedSpace;
 import com.quantumdev.integraservicios.database.model.Space;
 import com.quantumdev.integraservicios.database.model.StoredHardware;
+import com.quantumdev.integraservicios.queriesManagement.Service.SpaceService;
+import com.quantumdev.integraservicios.queriesManagement.Service.StoredHardwareService;
 
 import java.util.List;
 import java.time.Instant;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-
+/**
+ * QueryController is a REST controller that handles queries related to hardware and space reservations.
+ * It provides endpoints to retrieve available items and their history based on various filters.
+ * @author Nicolás Sabogal
+ */
 @RestController
 @RequestMapping("/api/v1/query")
-public interface QueryController {
+public class QueryController {
 
-    @GetMapping("hardware")
-    public List<StoredHardware> getAvaiableItems(
-            @RequestParam String name,
-            @RequestParam String type,
-            @RequestParam Short building,
-            @RequestParam Instant start,
-            @RequestParam Instant end,
-            @RequestParam Boolean getReserved,
-            @RequestParam Integer qSize,
-            @RequestParam Integer qPage,
-            @RequestParam String orderBy
-        );
+    @Autowired
+    private SpaceService spaceService;
 
-    @GetMapping("space")
-    public List<Space> getAvaiableSpaces(
-            @RequestParam String name,
-            @RequestParam String type,
-            @RequestParam Integer capacity,
-            @RequestParam Short building,
-            @RequestParam Instant start,
-            @RequestParam Instant end,
-            @RequestParam Boolean getReserved,
-            @RequestParam Integer qSize,
-            @RequestParam Integer qPage,
-            @RequestParam String orderBy
-        );
+    @Autowired
+    private StoredHardwareService storedHardwareService;
 
-    @GetMapping("hardwareHistory")
+    /**
+     * Retrieves available hardware items based on the provided filters.
+     * @param nameLike  Partial name of the hardware item to search for (optional).
+     * @param type      Type of the hardware item (optional).
+     * @param building  Building number where the hardware is located (optional).
+     * @param startDate Start date for the reservation period (optional).
+     * @param endDate   End date for the reservation period (optional).
+     * @param getAll    Flag to indicate if all items should be retrieved or only available ones.
+     * @param qSize     Number of items to retrieve per page.
+     * @param qPage     Page number to retrieve.
+     * @param orderBy   Field to order the results by (optional).
+     * @param descOrder Flag to indicate if the results should be ordered in descending order (optional).
+     * @return          List of available hardware items matching the filters.
+     */
+    @GetMapping("/hardware")
+    public List<StoredHardware> getAvailableItems(
+        @RequestParam(required = false) String nameLike,
+        @RequestParam(required = false) String type,
+        @RequestParam(required = false) Short building,
+        @RequestParam(required = false) Instant startDate,
+        @RequestParam(required = false) Instant endDate,
+        @RequestParam(required = false) Boolean getAll,
+        @RequestParam Integer qSize,
+        @RequestParam Integer qPage,
+        @RequestParam(required = false) String orderBy,
+        @RequestParam(required = false) Boolean descOrder
+    ) {
+        return this.storedHardwareService.get(
+                nameLike,
+                type,
+                building,
+                startDate,
+                endDate,
+                getAll,
+                qSize,
+                qPage,
+                orderBy,
+                descOrder
+            );
+    };
+
+    /**
+     * Retrieves available spaces based on the provided filters.
+     * @param nameLike  Partial name of the space to search for (optional).
+     * @param type      Type of the space (optional).
+     * @param capacity  Minimum capacity of the space (optional).
+     * @param building  Building number where the space is located (optional).
+     * @param startDate Start date for the reservation period (optional).
+     * @param endDate   End date for the reservation period (optional).
+     * @param getAll    Flag to indicate if all spaces should be retrieved or only available ones.
+     * @param qSize     Number of items to retrieve per page.
+     * @param qPage     Page number to retrieve.
+     * @param orderBy   Field to order the results by (optional).
+     * @param ascOrder  Flag to indicate if the results should be ordered in ascending order (optional).
+     * @return          List of available spaces matching the filters.
+     */
+    @GetMapping("/space")
+    public List<Space> getAvailableSpaces(
+        @RequestParam(required = false) String nameLike,
+        @RequestParam(required = false) String type,
+        @RequestParam(required = false) Short capacity,
+        @RequestParam(required = false) Short building,
+        @RequestParam(required = false) Instant startDate,
+        @RequestParam(required = false) Instant endDate,
+        @RequestParam(required = false) Boolean getAll,
+        @RequestParam Integer qSize,
+        @RequestParam Integer qPage,
+        @RequestParam(required = false) String orderBy,
+        @RequestParam(required = false) Boolean ascOrder
+    ) {
+        return this.spaceService.get(
+                nameLike,
+                type,
+                capacity,
+                building,
+                startDate,
+                endDate,
+                getAll,
+                qSize,
+                qPage,
+                orderBy,
+                ascOrder
+            );
+    };
+
+    @GetMapping("/hardwareHistory")
     public List<ReservedHardware> getItemHistory(
-            @RequestParam String email,
-            @RequestParam Integer qSize,
-            @RequestParam Integer qPage,
-            @RequestParam String orderBy
-        );
+        @RequestParam String email,
+        @RequestParam(required = false) String nameLike,
+        @RequestParam(required = false) String type,
+        @RequestParam(required = false) Short building,
+        @RequestParam(required = false) Instant startDate,
+        @RequestParam(required = false) Instant endDate,
+        @RequestParam(required = false) Boolean getReturned,
+        @RequestParam Integer qSize,
+        @RequestParam Integer qPage,
+        @RequestParam(required = false) String orderBy,
+        @RequestParam(required = false) Boolean ascOrder
+    ) {
+        throw new UnsupportedOperationException("Not implemented yet");
+    };
 
-    @GetMapping("spaceHistory")
+    @GetMapping("/spaceHistory")
     public List<ReservedSpace> getSpaceHistory(
-            @RequestParam String email,
-            @RequestParam Integer qSize,
-            @RequestParam Integer qPage,
-            @RequestParam String orderBy
-        );
+        @RequestParam String email,
+        @RequestParam(required = false) String nameLike,
+        @RequestParam(required = false) String type,
+        @RequestParam(required = false) Short capacity,
+        @RequestParam(required = false) Short building,
+        @RequestParam(required = false) Instant startDate,
+        @RequestParam(required = false) Instant endDate,
+        @RequestParam(required = false) Boolean getReturned,
+        @RequestParam Integer qSize,
+        @RequestParam Integer qPage,
+        @RequestParam(required = false) String orderBy,
+        @RequestParam(required = false) Boolean ascOrder
+    ) {
+        throw new UnsupportedOperationException("Not implemented yet");
+    };
 
 }
