@@ -7,6 +7,7 @@ import com.quantumdev.integraservicios.database.model.ReservedHardware;
 import com.quantumdev.integraservicios.database.model.ReservedSpace;
 import com.quantumdev.integraservicios.database.model.Space;
 import com.quantumdev.integraservicios.database.model.StoredHardware;
+import com.quantumdev.integraservicios.queriesManagement.Service.ReservedHardwareService;
 import com.quantumdev.integraservicios.queriesManagement.Service.SpaceService;
 import com.quantumdev.integraservicios.queriesManagement.Service.StoredHardwareService;
 
@@ -37,14 +38,14 @@ public class QueryController {
      * @param nameLike  Partial name of the hardware item to search for (optional).
      * @param type      Type of the hardware item (optional).
      * @param building  Building number where the hardware is located (optional).
-     * @param startDate Start date for the reservation period (optional).
-     * @param endDate   End date for the reservation period (optional).
-     * @param getAll    Flag to indicate if all items should be retrieved or only available ones.
+     * @param startDate Start date for the reservation period (required if getAll is false).
+     * @param endDate   End date for the reservation period (required if getAll is false).
+     * @param getAll    Flag to indicate if all spaces should be retrieved or only available ones (assumed false).
      * @param qSize     Number of items to retrieve per page.
      * @param qPage     Page number to retrieve.
      * @param orderBy   Field to order the results by (optional).
-     * @param descOrder Flag to indicate if the results should be ordered in descending order (optional).
-     * @return          List of available hardware items matching the filters.
+     * @param ascOrder  Flag to indicate if the results should be ordered in ascending order (assumed true).
+     * @return          List of available spaces matching the filters.
      */
     @GetMapping("/hardware")
     public List<StoredHardware> getAvailableItems(
@@ -79,13 +80,13 @@ public class QueryController {
      * @param type      Type of the space (optional).
      * @param capacity  Minimum capacity of the space (optional).
      * @param building  Building number where the space is located (optional).
-     * @param startDate Start date for the reservation period (optional).
-     * @param endDate   End date for the reservation period (optional).
-     * @param getAll    Flag to indicate if all spaces should be retrieved or only available ones.
+     * @param startDate Start date for the reservation period (required if getAll is false).
+     * @param endDate   End date for the reservation period (required if getAll is false).
+     * @param getAll    Flag to indicate if all spaces should be retrieved or only available ones (assumed false).
      * @param qSize     Number of items to retrieve per page.
      * @param qPage     Page number to retrieve.
      * @param orderBy   Field to order the results by (optional).
-     * @param ascOrder  Flag to indicate if the results should be ordered in ascending order (optional).
+     * @param ascOrder  Flag to indicate if the results should be ordered in ascending order (assumed true).
      * @return          List of available spaces matching the filters.
      */
     @GetMapping("/space")
@@ -117,6 +118,20 @@ public class QueryController {
             );
     };
 
+    /**
+     * Retrieves the history of reserved hardware items based on the provided filters.
+     * @param email     Email of the user requesting the history.
+     * @param nameLike  Partial name of the hardware item to search for (optional).
+     * @param type      Type of the hardware item (optional).
+     * @param building  Building number where the hardware was located (optional).
+     * @param startDate Start date for the reservation period (required if getAll is false).
+     * @param endDate   End date for the reservation period (required if getAll is false).
+     * @param qSize     Number of reservations to retrieve per page.
+     * @param qPage     Page number to retrieve.
+     * @param orderBy   Field to order the results by (optional).
+     * @param ascOrder  Flag to indicate if the results should be ordered in ascending order (assumed true).
+     * @return          List of reserved hardware items matching the filters.
+     */
     @GetMapping("/hardwareHistory")
     public List<ReservedHardware> getItemHistory(
         @RequestParam String email,
@@ -125,7 +140,6 @@ public class QueryController {
         @RequestParam(required = false) Short building,
         @RequestParam(required = false) Instant startDate,
         @RequestParam(required = false) Instant endDate,
-        @RequestParam(required = false) Boolean getReturned,
         @RequestParam Integer qSize,
         @RequestParam Integer qPage,
         @RequestParam(required = false) String orderBy,
@@ -134,6 +148,21 @@ public class QueryController {
         throw new UnsupportedOperationException("Not implemented yet");
     };
 
+    /**
+     * Retrieves the history of reserved spaces based on the provided filters.
+     * @param email     Email of the user requesting the history.
+     * @param nameLike  Partial name of the space to search for (optional).
+     * @param type      Type of the space (optional).
+     * @param capacity  Minimum capacity of the space (optional).
+     * @param building  Building number where the space was located (optional).
+     * @param startDate Start date for the reservation period (required if getAll is false).
+     * @param endDate   End date for the reservation period (required if getAll is false).
+     * @param qSize     Number of reservations to retrieve per page.
+     * @param qPage     Page number to retrieve.
+     * @param orderBy   Field to order the results by (optional).
+     * @param ascOrder  Flag to indicate if the results should be ordered in ascending order (assumed true).
+     * @return          List of reserved spaces matching the filters.
+     */
     @GetMapping("/spaceHistory")
     public List<ReservedSpace> getSpaceHistory(
         @RequestParam String email,
@@ -143,7 +172,6 @@ public class QueryController {
         @RequestParam(required = false) Short building,
         @RequestParam(required = false) Instant startDate,
         @RequestParam(required = false) Instant endDate,
-        @RequestParam(required = false) Boolean getReturned,
         @RequestParam Integer qSize,
         @RequestParam Integer qPage,
         @RequestParam(required = false) String orderBy,
