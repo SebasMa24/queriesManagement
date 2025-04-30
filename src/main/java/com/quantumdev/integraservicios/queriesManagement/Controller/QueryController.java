@@ -3,6 +3,7 @@ package com.quantumdev.integraservicios.queriesManagement.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.quantumdev.integraservicios.database.model.User;
 import com.quantumdev.integraservicios.queriesManagement.Service.ReservedHardwareService;
 import com.quantumdev.integraservicios.queriesManagement.Service.ReservedSpaceService;
 import com.quantumdev.integraservicios.queriesManagement.Service.SpaceService;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.time.Instant;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -133,7 +135,6 @@ public class QueryController {
 
     /**
      * Retrieves the history of reserved hardware items based on the provided filters.
-     * @param email     Email of the user requesting the history.
      * @param nameLike  Partial name of the hardware item to search for (optional).
      * @param type      Type of the hardware item (optional).
      * @param building  Building number where the hardware was located (optional).
@@ -147,7 +148,7 @@ public class QueryController {
      */
     @GetMapping("/hardwareHistory")
     public List<ReservedHardwareListEntry> getItemHistory(
-        @RequestParam String email,
+        // @RequestParam String email,
         @RequestParam(required = false) String nameLike,
         @RequestParam(required = false) String type,
         @RequestParam(required = false) Short building,
@@ -158,6 +159,7 @@ public class QueryController {
         @RequestParam(required = false) String orderBy,
         @RequestParam(required = false) Boolean ascOrder
     ) {
+        String email = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getEmail();
         return this.reservedHardwareService.get(
                 email,
                 nameLike,
@@ -177,7 +179,6 @@ public class QueryController {
 
     /**
      * Retrieves the history of reserved spaces based on the provided filters.
-     * @param email     Email of the user requesting the history.
      * @param nameLike  Partial name of the space to search for (optional).
      * @param type      Type of the space (optional).
      * @param capacity  Minimum capacity of the space (optional).
@@ -192,7 +193,6 @@ public class QueryController {
      */
     @GetMapping("/spaceHistory")
     public List<ReservedSpaceListEntry> getSpaceHistory(
-        @RequestParam String email,
         @RequestParam(required = false) String nameLike,
         @RequestParam(required = false) String type,
         @RequestParam(required = false) Short capacity,
@@ -204,6 +204,7 @@ public class QueryController {
         @RequestParam(required = false) String orderBy,
         @RequestParam(required = false) Boolean ascOrder
     ) {
+        String email = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getEmail();
         return this.reservedSpaceService.get(
                 email,
                 nameLike,
