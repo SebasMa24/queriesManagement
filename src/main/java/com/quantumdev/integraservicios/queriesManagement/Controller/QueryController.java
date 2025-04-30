@@ -8,6 +8,7 @@ import com.quantumdev.integraservicios.database.model.ReservedSpace;
 import com.quantumdev.integraservicios.database.model.Space;
 import com.quantumdev.integraservicios.database.model.StoredHardware;
 import com.quantumdev.integraservicios.queriesManagement.Service.ReservedHardwareService;
+import com.quantumdev.integraservicios.queriesManagement.Service.ReservedSpaceService;
 import com.quantumdev.integraservicios.queriesManagement.Service.SpaceService;
 import com.quantumdev.integraservicios.queriesManagement.Service.StoredHardwareService;
 
@@ -32,6 +33,12 @@ public class QueryController {
 
     @Autowired
     private StoredHardwareService storedHardwareService;
+
+    @Autowired
+    private ReservedHardwareService reservedHardwareService;
+
+    @Autowired
+    private ReservedSpaceService reservedSpaceService;
 
     /**
      * Retrieves available hardware items based on the provided filters.
@@ -124,8 +131,8 @@ public class QueryController {
      * @param nameLike  Partial name of the hardware item to search for (optional).
      * @param type      Type of the hardware item (optional).
      * @param building  Building number where the hardware was located (optional).
-     * @param startDate Start date for the reservation period (required if getAll is false).
-     * @param endDate   End date for the reservation period (required if getAll is false).
+     * @param startDate Start date for the reservation period (optional).
+     * @param endDate   End date for the reservation period (optional).
      * @param qSize     Number of reservations to retrieve per page.
      * @param qPage     Page number to retrieve.
      * @param orderBy   Field to order the results by (optional).
@@ -145,7 +152,18 @@ public class QueryController {
         @RequestParam(required = false) String orderBy,
         @RequestParam(required = false) Boolean ascOrder
     ) {
-        throw new UnsupportedOperationException("Not implemented yet");
+        return this.reservedHardwareService.get(
+                email,
+                nameLike,
+                type,
+                building,
+                startDate,
+                endDate,
+                qSize,
+                qPage,
+                orderBy,
+                ascOrder
+            );
     };
 
     /**
@@ -155,8 +173,8 @@ public class QueryController {
      * @param type      Type of the space (optional).
      * @param capacity  Minimum capacity of the space (optional).
      * @param building  Building number where the space was located (optional).
-     * @param startDate Start date for the reservation period (required if getAll is false).
-     * @param endDate   End date for the reservation period (required if getAll is false).
+     * @param startDate Start date for the reservation period (optional).
+     * @param endDate   End date for the reservation period (optional).
      * @param qSize     Number of reservations to retrieve per page.
      * @param qPage     Page number to retrieve.
      * @param orderBy   Field to order the results by (optional).
@@ -177,7 +195,19 @@ public class QueryController {
         @RequestParam(required = false) String orderBy,
         @RequestParam(required = false) Boolean ascOrder
     ) {
-        throw new UnsupportedOperationException("Not implemented yet");
+        return this.reservedSpaceService.get(
+                email,
+                nameLike,
+                type,
+                capacity,
+                building,
+                startDate,
+                endDate,
+                qSize,
+                qPage,
+                orderBy,
+                ascOrder
+            );
     };
 
 }
