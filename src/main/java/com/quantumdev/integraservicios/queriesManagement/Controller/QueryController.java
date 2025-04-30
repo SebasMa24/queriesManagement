@@ -3,14 +3,14 @@ package com.quantumdev.integraservicios.queriesManagement.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.quantumdev.integraservicios.database.model.ReservedHardware;
-import com.quantumdev.integraservicios.database.model.ReservedSpace;
-import com.quantumdev.integraservicios.database.model.Space;
-import com.quantumdev.integraservicios.database.model.StoredHardware;
 import com.quantumdev.integraservicios.queriesManagement.Service.ReservedHardwareService;
 import com.quantumdev.integraservicios.queriesManagement.Service.ReservedSpaceService;
 import com.quantumdev.integraservicios.queriesManagement.Service.SpaceService;
 import com.quantumdev.integraservicios.queriesManagement.Service.StoredHardwareService;
+import com.quantumdev.integraservicios.queriesManagement.response.ReservedHardwareListEntry;
+import com.quantumdev.integraservicios.queriesManagement.response.ReservedSpaceListEntry;
+import com.quantumdev.integraservicios.queriesManagement.response.SpaceListEntry;
+import com.quantumdev.integraservicios.queriesManagement.response.StoredHardwareListEntry;
 
 import java.util.List;
 import java.time.Instant;
@@ -55,7 +55,7 @@ public class QueryController {
      * @return          List of available spaces matching the filters.
      */
     @GetMapping("/hardware")
-    public List<StoredHardware> getAvailableItems(
+    public List<StoredHardwareListEntry> getAvailableItems(
         @RequestParam(required = false) String nameLike,
         @RequestParam(required = false) String type,
         @RequestParam(required = false) Short building,
@@ -78,7 +78,10 @@ public class QueryController {
                 qPage,
                 orderBy,
                 descOrder
-            );
+            )
+            .stream()
+            .map(StoredHardwareListEntry::from)
+            .toList();
     };
 
     /**
@@ -97,7 +100,7 @@ public class QueryController {
      * @return          List of available spaces matching the filters.
      */
     @GetMapping("/space")
-    public List<Space> getAvailableSpaces(
+    public List<SpaceListEntry> getAvailableSpaces(
         @RequestParam(required = false) String nameLike,
         @RequestParam(required = false) String type,
         @RequestParam(required = false) Short capacity,
@@ -122,7 +125,10 @@ public class QueryController {
                 qPage,
                 orderBy,
                 ascOrder
-            );
+            )
+            .stream()
+            .map(SpaceListEntry::from)
+            .toList();
     };
 
     /**
@@ -140,7 +146,7 @@ public class QueryController {
      * @return          List of reserved hardware items matching the filters.
      */
     @GetMapping("/hardwareHistory")
-    public List<ReservedHardware> getItemHistory(
+    public List<ReservedHardwareListEntry> getItemHistory(
         @RequestParam String email,
         @RequestParam(required = false) String nameLike,
         @RequestParam(required = false) String type,
@@ -163,7 +169,10 @@ public class QueryController {
                 qPage,
                 orderBy,
                 ascOrder
-            );
+            )
+            .stream()
+            .map(ReservedHardwareListEntry::from)
+            .toList();
     };
 
     /**
@@ -182,7 +191,7 @@ public class QueryController {
      * @return          List of reserved spaces matching the filters.
      */
     @GetMapping("/spaceHistory")
-    public List<ReservedSpace> getSpaceHistory(
+    public List<ReservedSpaceListEntry> getSpaceHistory(
         @RequestParam String email,
         @RequestParam(required = false) String nameLike,
         @RequestParam(required = false) String type,
@@ -207,7 +216,10 @@ public class QueryController {
                 qPage,
                 orderBy,
                 ascOrder
-            );
+            )
+            .stream()
+            .map(ReservedSpaceListEntry::from)
+            .toList();
     };
 
 }
