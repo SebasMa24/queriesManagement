@@ -6,7 +6,9 @@ import jakarta.persistence.Table;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * Entity class representing a Warehouse in the database.
@@ -15,6 +17,8 @@ import lombok.NoArgsConstructor;
  * @author Nicolás Sabogal
  */
 @Entity
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
