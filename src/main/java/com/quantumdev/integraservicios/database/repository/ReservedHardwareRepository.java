@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 import com.quantumdev.integraservicios.database.model.ReservedHardware;
 
@@ -14,6 +15,7 @@ import com.quantumdev.integraservicios.database.model.ReservedHardware;
  * It provides methods to query reserved hardware items based on various filters.
  * @author Nicolás Sabogal
  */
+@Repository
 public interface ReservedHardwareRepository extends JpaRepository<ReservedHardware, Long> {
 
     /**

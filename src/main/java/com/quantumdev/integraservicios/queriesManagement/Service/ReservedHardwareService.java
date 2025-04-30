@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
 
 import com.quantumdev.integraservicios.database.model.ReservedHardware;
 import com.quantumdev.integraservicios.database.repository.ReservedHardwareRepository;
@@ -16,6 +17,7 @@ import com.quantumdev.integraservicios.database.repository.ReservedHardwareRepos
  * It allows filtering based on various criteria such as email, name, type, building, and reservation dates.
  * @author Nicolás Sabogal
  */
+@Service
 public class ReservedHardwareService {
 
     @Autowired
