@@ -20,6 +20,7 @@ import io.jsonwebtoken.security.Keys;
 @Service
 public class JwtService {
 
+    // TODO: Inject this secret as a environment variable.
     private static final String secret = "uEnr0D/2cRjNc+JzXtkJgx/kKYlBo8Gz/4fE1RmiLfY=";
 
     public Claims validateToken(String token) throws JwtException {
