@@ -114,7 +114,7 @@ public class Space {
         if (index >= 0)
             throw new IllegalArgumentException("Schedule entry for " + entry.getDay() + " already exists.");
 
-        this.schedule += "," + entry;
+        this.schedule += (this.schedule.isEmpty() ? "" : ",") + entry.toString();
     }
 
     /**
@@ -137,7 +137,7 @@ public class Space {
         // Rebuild the schedule string from the remaining entries.
         this.schedule = "";
         for (ScheduleEntry entry : entries)
-            this.addScheduleEntry(entry);
+            this.schedule += (this.schedule.isEmpty() ? "" : ",") + entry.toString();
     }
 
 }
