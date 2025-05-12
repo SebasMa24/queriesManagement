@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.quantumdev.integraservicios.database.model.ERole;
 import com.quantumdev.integraservicios.database.model.ReservedHardware;
-import com.quantumdev.integraservicios.database.model.User;
 import com.quantumdev.integraservicios.queriesManagement.Service.ReservedHardwareService;
 import com.quantumdev.integraservicios.queriesManagement.Service.ReservedSpaceService;
 import com.quantumdev.integraservicios.queriesManagement.Service.SpaceService;
@@ -20,6 +19,7 @@ import java.time.Instant;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -77,8 +77,8 @@ public class OperationsController {
         @RequestParam(required = false) Instant startDate,
         @RequestParam(required = false) Instant endDate,
         @RequestParam(required = false) Boolean getAll,
-        @RequestParam Integer qSize,
-        @RequestParam Integer qPage,
+        @RequestParam(defaultValue = "10") Integer qSize,
+        @RequestParam(defaultValue = "0") Integer qPage,
         @RequestParam(required = false) String orderBy,
         @RequestParam(required = false) Boolean descOrder
     ) {
@@ -123,8 +123,8 @@ public class OperationsController {
         @RequestParam(required = false) Instant startDate,
         @RequestParam(required = false) Instant endDate,
         @RequestParam(required = false) Boolean getAll,
-        @RequestParam Integer qSize,
-        @RequestParam Integer qPage,
+        @RequestParam(defaultValue = "10") Integer qSize,
+        @RequestParam(defaultValue = "0") Integer qPage,
         @RequestParam(required = false) String orderBy,
         @RequestParam(required = false) Boolean ascOrder
     ) {
@@ -168,16 +168,21 @@ public class OperationsController {
         @RequestParam(required = false) Short building,
         @RequestParam(required = false) Instant startDate,
         @RequestParam(required = false) Instant endDate,
-        @RequestParam Integer qSize,
-        @RequestParam Integer qPage,
+        @RequestParam(defaultValue = "10") Integer qSize,
+        @RequestParam(defaultValue = "0") Integer qPage,
         @RequestParam(required = false) String orderBy,
         @RequestParam(required = false) Boolean ascOrder
     ) {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (user.getRole().getName() != ERole.ROLE_ADMIN && email != null)
-            throw new IllegalArgumentException("User not authorized to access this resource.");
-        if (user.getRole().getName() != ERole.ROLE_ADMIN)
-            email = user.getEmail();
+        UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (!user
+                .getAuthorities()
+                .stream()
+                .anyMatch(a -> a.getAuthority().equals(ERole.ROLE_ADMIN.name()))
+           ) {
+            if (email != null)
+                throw new IllegalArgumentException("User not authorized to access this resource.");
+            email = user.getUsername();
+        }
 
         return this.reservedHardwareService.get(
                 email,
@@ -220,16 +225,21 @@ public class OperationsController {
         @RequestParam(required = false) Short building,
         @RequestParam(required = false) Instant startDate,
         @RequestParam(required = false) Instant endDate,
-        @RequestParam Integer qSize,
-        @RequestParam Integer qPage,
+        @RequestParam(defaultValue = "10") Integer qSize,
+        @RequestParam(defaultValue = "0") Integer qPage,
         @RequestParam(required = false) String orderBy,
         @RequestParam(required = false) Boolean ascOrder
     ) {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (user.getRole().getName() != ERole.ROLE_ADMIN && email != null)
-            throw new IllegalArgumentException("User not authorized to access this resource.");
-        if (user.getRole().getName() != ERole.ROLE_ADMIN)
-            email = user.getEmail();
+        UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (!user
+                .getAuthorities()
+                .stream()
+                .anyMatch(a -> a.getAuthority().equals(ERole.ROLE_ADMIN.name()))
+           ) {
+            if (email != null)
+                throw new IllegalArgumentException("User not authorized to access this resource.");
+            email = user.getUsername();
+        }
 
         return this.reservedSpaceService.get(
                 email,
