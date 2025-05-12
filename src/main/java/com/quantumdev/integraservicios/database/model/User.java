@@ -1,5 +1,7 @@
 package com.quantumdev.integraservicios.database.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -55,6 +57,7 @@ public class User {
     )
     private Role role;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @NotEmpty
     @Column(
         name = "pass_user",
