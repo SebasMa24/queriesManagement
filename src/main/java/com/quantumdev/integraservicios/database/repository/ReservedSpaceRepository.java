@@ -43,8 +43,8 @@ public interface ReservedSpaceRepository extends JpaRepository<ReservedSpace, Lo
             AND (:type IS NULL OR s.type_space = :type)
             AND (:capacity IS NULL OR s.capacity_space >= :capacity)
             AND (:building IS NULL OR rs.building_resspace = :building)
-            AND (:startDate IS NULL OR rs.start_resspace >= :startDate)
-            AND (:endDate IS NULL OR rs.end_resspace <= :endDate)
+            AND (CAST(:startDate AS TIMESTAMP) IS NULL OR rs.start_resspace >= CAST(:startDate AS TIMESTAMP))
+            AND (CAST(:endDate AS TIMESTAMP) IS NULL OR rs.end_resspace <= CAST(:endDate AS TIMESTAMP))
         """,
         nativeQuery = true
     )

@@ -43,8 +43,8 @@ public interface ReservedHardwareRepository extends JpaRepository<ReservedHardwa
             AND (:nameLike IS NULL OR h.name_hardware LIKE '%' || :nameLike || '%')
             AND (:type IS NULL OR h.type_hardware = :type)
             AND (:building IS NULL OR sh.building_storedhw = :building)
-            AND (:startDate IS NULL OR rh.start_reshw >= :startDate)
-            AND (:endDate IS NULL OR rh.end_reshw <= :endDate)
+            AND (CAST(:startDate AS TIMESTAMP) IS NULL OR rh.start_reshw >= CAST(:startDate AS TIMESTAMP))
+            AND (CAST(:endDate AS TIMESTAMP) IS NULL OR rh.end_reshw <= CAST(:endDate AS TIMESTAMP))
         """,
         nativeQuery = true
     )
