@@ -24,6 +24,15 @@ public class ReservedHardwareService {
     private ReservedHardwareRepository reservedHardwareRepository;
 
     /**
+     * Retrieves a reserved hardware item by its ID.
+     * @param id ID of the reserved hardware item.
+     * @return ReservedHardware object if found, null otherwise.
+     */
+    public ReservedHardware getById(Long id) {
+        return this.reservedHardwareRepository.findById(id).orElse(null);
+    }
+    
+    /**
      * Retrieves the history of reserved hardware items based on the provided filters.
      * @param email     Email of the user requesting the history.
      * @param nameLike  Partial name of the hardware item to search for (optional).
@@ -74,5 +83,5 @@ public class ReservedHardwareService {
                 pageable
             );
     }
-    
+
 }

@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.quantumdev.integraservicios.database.model.ERole;
+import com.quantumdev.integraservicios.database.model.ReservedHardware;
 import com.quantumdev.integraservicios.database.model.User;
 import com.quantumdev.integraservicios.queriesManagement.Service.ReservedHardwareService;
 import com.quantumdev.integraservicios.queriesManagement.Service.ReservedSpaceService;
@@ -20,6 +21,7 @@ import java.time.Instant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
@@ -42,6 +44,16 @@ public class OperationsController {
 
     @Autowired
     private ReservedSpaceService reservedSpaceService;
+
+    /**
+     * Retrieves a reserved hardware item by its ID.
+     * @param id  ID of the reserved hardware item.
+     * @return    ReservedHardware object if found, null otherwise.
+     */
+    @GetMapping("/hardware/{id}")
+    public ReservedHardware getReservedHardware(@PathVariable Long id) {
+        return this.reservedHardwareService.getById(id);
+    }
 
     /**
      * Retrieves available hardware items based on the provided filters.
