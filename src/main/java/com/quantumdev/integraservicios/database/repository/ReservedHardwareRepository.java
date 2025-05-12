@@ -39,7 +39,7 @@ public interface ReservedHardwareRepository extends JpaRepository<ReservedHardwa
             AND rh.code_reshw = sh.code_storedhw
         JOIN hardware h ON sh.hardware_storedhw = h.code_hardware
         WHERE
-            rh.requester_reshw = :email
+            (:email IS NULL OR rh.requester_reshw = :email)
             AND (:nameLike IS NULL OR h.name_hardware LIKE '%' || :nameLike || '%')
             AND (:type IS NULL OR h.type_hardware = :type)
             AND (:building IS NULL OR sh.building_storedhw = :building)

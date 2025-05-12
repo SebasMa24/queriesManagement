@@ -51,10 +51,6 @@ public class ReservedSpaceService {
         String orderBy,
         Boolean ascOrder
     ) {
-        // Validation.
-        if (email == null || email.isEmpty())
-            throw new IllegalArgumentException("Email is required.");
-
         // Creating a Pageable object for pagination and sorting.
         Pageable pageable;
         if (orderBy == null || orderBy.isEmpty())

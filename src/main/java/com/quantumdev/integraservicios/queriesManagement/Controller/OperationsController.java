@@ -3,6 +3,7 @@ package com.quantumdev.integraservicios.queriesManagement.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.quantumdev.integraservicios.database.model.ERole;
 import com.quantumdev.integraservicios.database.model.User;
 import com.quantumdev.integraservicios.queriesManagement.Service.ReservedHardwareService;
 import com.quantumdev.integraservicios.queriesManagement.Service.ReservedSpaceService;
@@ -27,8 +28,8 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @author Nicolás Sabogal
  */
 @RestController
-@RequestMapping("/api/v1/query")
-public class QueryController {
+@RequestMapping("/api/operations")
+public class OperationsController {
 
     @Autowired
     private SpaceService spaceService;
@@ -56,7 +57,7 @@ public class QueryController {
      * @param ascOrder  Flag to indicate if the results should be ordered in ascending order (assumed true).
      * @return          List of available spaces matching the filters.
      */
-    @GetMapping("/hardware")
+    @GetMapping("/hardware/availavility")
     public List<StoredHardwareListEntry> getAvailableItems(
         @RequestParam(required = false) String nameLike,
         @RequestParam(required = false) String type,
@@ -101,7 +102,7 @@ public class QueryController {
      * @param ascOrder  Flag to indicate if the results should be ordered in ascending order (assumed true).
      * @return          List of available spaces matching the filters.
      */
-    @GetMapping("/space")
+    @GetMapping("/space/availavility")
     public List<SpaceListEntry> getAvailableSpaces(
         @RequestParam(required = false) String nameLike,
         @RequestParam(required = false) String type,
@@ -135,6 +136,7 @@ public class QueryController {
 
     /**
      * Retrieves the history of reserved hardware items based on the provided filters.
+     * @param email     Email of the user making the request (optional for ADMIN, required).
      * @param nameLike  Partial name of the hardware item to search for (optional).
      * @param type      Type of the hardware item (optional).
      * @param building  Building number where the hardware was located (optional).
@@ -146,9 +148,9 @@ public class QueryController {
      * @param ascOrder  Flag to indicate if the results should be ordered in ascending order (assumed true).
      * @return          List of reserved hardware items matching the filters.
      */
-    @GetMapping("/hardwareHistory")
+    @GetMapping("/hardware")
     public List<ReservedHardwareListEntry> getItemHistory(
-        // @RequestParam String email,
+        @RequestParam(required = false) String email,
         @RequestParam(required = false) String nameLike,
         @RequestParam(required = false) String type,
         @RequestParam(required = false) Short building,
@@ -159,7 +161,12 @@ public class QueryController {
         @RequestParam(required = false) String orderBy,
         @RequestParam(required = false) Boolean ascOrder
     ) {
-        String email = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getEmail();
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (user.getRole().getName() != ERole.ROLE_ADMIN && email != null)
+            throw new IllegalArgumentException("User not authorized to access this resource.");
+        if (user.getRole().getName() != ERole.ROLE_ADMIN)
+            email = user.getEmail();
+
         return this.reservedHardwareService.get(
                 email,
                 nameLike,
@@ -179,6 +186,7 @@ public class QueryController {
 
     /**
      * Retrieves the history of reserved spaces based on the provided filters.
+     * @param email     Email of the user making the request (optional for ADMIN, required).
      * @param nameLike  Partial name of the space to search for (optional).
      * @param type      Type of the space (optional).
      * @param capacity  Minimum capacity of the space (optional).
@@ -191,8 +199,9 @@ public class QueryController {
      * @param ascOrder  Flag to indicate if the results should be ordered in ascending order (assumed true).
      * @return          List of reserved spaces matching the filters.
      */
-    @GetMapping("/spaceHistory")
+    @GetMapping("/space")
     public List<ReservedSpaceListEntry> getSpaceHistory(
+        @RequestParam(required = false) String email,
         @RequestParam(required = false) String nameLike,
         @RequestParam(required = false) String type,
         @RequestParam(required = false) Short capacity,
@@ -204,7 +213,12 @@ public class QueryController {
         @RequestParam(required = false) String orderBy,
         @RequestParam(required = false) Boolean ascOrder
     ) {
-        String email = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getEmail();
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (user.getRole().getName() != ERole.ROLE_ADMIN && email != null)
+            throw new IllegalArgumentException("User not authorized to access this resource.");
+        if (user.getRole().getName() != ERole.ROLE_ADMIN)
+            email = user.getEmail();
+
         return this.reservedSpaceService.get(
                 email,
                 nameLike,

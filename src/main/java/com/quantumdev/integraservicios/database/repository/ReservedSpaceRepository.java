@@ -38,7 +38,7 @@ public interface ReservedSpaceRepository extends JpaRepository<ReservedSpace, Lo
             rs.building_resspace = s.building_space
             AND rs.space_resspace = s.code_space
         WHERE
-            rs.requester_resspace = :email
+            (:email IS NULL OR rs.requester_resspace = :email)
             AND (:nameLike IS NULL OR s.name_space LIKE '%' || :nameLike || '%')
             AND (:type IS NULL OR s.type_space = :type)
             AND (:capacity IS NULL OR s.capacity_space >= :capacity)
