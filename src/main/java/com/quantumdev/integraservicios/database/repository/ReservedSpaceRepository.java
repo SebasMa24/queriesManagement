@@ -34,14 +34,14 @@ public interface ReservedSpaceRepository extends JpaRepository<ReservedSpace, Lo
         value = """
         SELECT rs.*
         FROM ReservedSpace rs
-        JOIN Space s ON
-            rs.building_resspace = s.building_space
-            AND rs.space_resspace = s.code_space
+        JOIN Space sp
+            ON rs.building_resspace = sp.building_space
+            AND rs.space_resspace = sp.code_space
         WHERE
             (:email IS NULL OR rs.requester_resspace = :email)
-            AND (:nameLike IS NULL OR s.name_space LIKE '%' || :nameLike || '%')
-            AND (:type IS NULL OR s.type_space = :type)
-            AND (:capacity IS NULL OR s.capacity_space >= :capacity)
+            AND (:nameLike IS NULL OR sp.name_space LIKE '%' || :nameLike || '%')
+            AND (:type IS NULL OR sp.type_space = :type)
+            AND (:capacity IS NULL OR sp.capacity_space >= :capacity)
             AND (:building IS NULL OR rs.building_resspace = :building)
             AND (CAST(:startDate AS TIMESTAMP) IS NULL OR rs.start_resspace >= CAST(:startDate AS TIMESTAMP))
             AND (CAST(:endDate AS TIMESTAMP) IS NULL OR rs.end_resspace <= CAST(:endDate AS TIMESTAMP))

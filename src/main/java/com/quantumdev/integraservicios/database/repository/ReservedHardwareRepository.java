@@ -31,20 +31,21 @@ public interface ReservedHardwareRepository extends JpaRepository<ReservedHardwa
      */
     @Query(
         value = """
-        SELECT rh.*
-        FROM reservedHardware rh
-        JOIN storedHardware sh ON
-            rh.building_reshw = sh.building_storedhw
-            AND rh.warehouse_reshw = sh.warehouse_storedhw
-            AND rh.code_reshw = sh.code_storedhw
-        JOIN hardware h ON sh.hardware_storedhw = h.code_hardware
-        WHERE
-            (:email IS NULL OR rh.requester_reshw = :email)
-            AND (:nameLike IS NULL OR h.name_hardware LIKE '%' || :nameLike || '%')
-            AND (:type IS NULL OR h.type_hardware = :type)
-            AND (:building IS NULL OR sh.building_storedhw = :building)
-            AND (CAST(:startDate AS TIMESTAMP) IS NULL OR rh.start_reshw >= CAST(:startDate AS TIMESTAMP))
-            AND (CAST(:endDate AS TIMESTAMP) IS NULL OR rh.end_reshw <= CAST(:endDate AS TIMESTAMP))
+            SELECT rh.*
+            FROM reservedHardware rh
+            INNER JOIN storedhardware sh
+                ON rh.building_reshw = sh.building_storedhw
+                AND rh.warehouse_reshw = sh.warehouse_storedhw
+                AND rh.storedhw_reshw = sh.code_storedhw
+            INNER JOIN hardware hw
+                ON sh.hardware_storedhw = hw.code_hardware
+            WHERE
+                (:email IS NULL OR rh.requester_reshw = :email)
+                AND (:nameLike IS NULL OR hw.name_hardware LIKE CONCAT('%', :nameLike, '%'))
+                AND (:type IS NULL OR hw.type_hardware = :type)
+                AND (:building IS NULL OR sh.building_storedhw = :building)
+                AND (CAST(:startDate AS TIMESTAMP) IS NULL OR rh.start_reshw >= CAST(:startDate AS TIMESTAMP))
+                AND (CAST(:endDate AS TIMESTAMP) IS NULL OR rh.end_reshw <= CAST(:endDate AS TIMESTAMP));
         """,
         nativeQuery = true
     )
