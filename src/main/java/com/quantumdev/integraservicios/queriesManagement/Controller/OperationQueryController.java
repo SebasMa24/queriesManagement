@@ -31,7 +31,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  */
 @RestController
 @RequestMapping("/api/operations")
-public class OperationsController {
+public class OperationQueryController {
 
     @Autowired
     private SpaceService spaceService;
