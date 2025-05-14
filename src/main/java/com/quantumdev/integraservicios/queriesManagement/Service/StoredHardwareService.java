@@ -86,34 +86,19 @@ public class StoredHardwareService {
         if (startDateTime.getDayOfYear() != endDateTime.getDayOfYear())
             throw new IllegalArgumentException("Reservations can only be made for a single day.");
 
+        // Determine the day of the week for the start date.
+        String dayChar = ScheduleEntry.DAY_MAP.get(startDateTime.getDayOfWeek()).toString();
+
         // Get the list of non-reserved items within the specified date range.
-        List<StoredHardware> items = this.storedHardwareRepository.getNonReserved(
+        return this.storedHardwareRepository.getNonReserved(
                     nameLike,
                     type,
                     building,
+                    dayChar,
                     startDate,
                     endDate,
                     pageable
                 );
-        
-        // Filter out items whose schedule entries are not contained in the specified date range.
-        items.removeIf(item -> {
-            boolean remove = true;
-            // For each item, check if any of its schedule entries are contained in the specified date range.
-            for (ScheduleEntry entry : item.getHardware().getSchedule()) {
-                if (entry.getDay() != startDateTime.getDayOfWeek())
-                    continue;
-                if (    entry.getStart().compareTo(startDateTime.toLocalTime()) <= 0
-                     && entry.getEnd().compareTo(endDateTime.toLocalTime()) >= 0
-                   ) {
-                    remove = false; // Found a cointained entry, do not remove the item.
-                    break;
-                }
-            }
-            return remove; // Remove is true if no contained entry was found.
-        });
-
-        return items;
     }
     
 }

@@ -30,13 +30,13 @@ public interface StoredHardwareRepository extends JpaRepository<StoredHardware, 
      */
     @Query(
         value = """
-        SELECT sh.*
-        FROM StoredHardware sh
-        INNER JOIN Hardware h ON h.code_hardware = sh.hardware_storedhw
-        WHERE
-            (:nameLike IS NULL OR h.name_hardware LIKE '%' || :nameLike || '%')
-            AND (:type IS NULL OR h.type_hardware = :type)
-            AND (:building IS NULL OR sh.building_storedhw = :building)
+            SELECT sh.*
+            FROM StoredHardware sh
+            INNER JOIN Hardware h ON h.code_hardware = sh.hardware_storedhw
+            WHERE
+                (:nameLike IS NULL OR h.name_hardware LIKE CONCAT('%', :nameLike, '%'))
+                AND (:type IS NULL OR h.type_hardware = :type)
+                AND (:building IS NULL OR sh.building_storedhw = :building)
         """,
         nativeQuery = true
     )
@@ -59,28 +59,40 @@ public interface StoredHardwareRepository extends JpaRepository<StoredHardware, 
      */
     @Query(
         value = """
-        WITH rsh AS (
-            SELECT
-                rh.building_reshw,
-                rh.warehouse_reshw,
-                rh.storedhw_reshw
-            FROM ReservedHardware rh
+            WITH rsh AS (
+                SELECT
+                    rh.building_reshw,
+                    rh.warehouse_reshw,
+                    rh.storedhw_reshw
+                FROM ReservedHardware rh
+                WHERE
+                    rh.start_reshw < CAST(:endDate AS TIMESTAMP)
+                    AND rh.end_reshw > CAST(:startDate AS TIMESTAMP)
+            )
+            SELECT sh.*
+            FROM StoredHardware sh
+            INNER JOIN Hardware h
+                ON h.code_hardware = sh.hardware_storedhw
+            LEFT OUTER JOIN rsh
+                ON sh.building_storedhw = rsh.building_reshw
+                AND sh.warehouse_storedhw = rsh.warehouse_reshw
+                AND sh.code_storedhw = rsh.storedhw_reshw
             WHERE
-                 rh.start_reshw < :startDate
-                AND rh.end_reshw > :endDate
-        )
-        SELECT sh.*
-        FROM StoredHardware sh
-        INNER JOIN Hardware h ON h.code_hardware = sh.hardware_storedhw
-        LEFT OUTER JOIN rsh ON
-            sh.building_storedhw = rsh.building_reshw
-            AND sh.warehouse_storedhw = rsh.warehouse_reshw
-            AND sh.code_storedhw = rsh.storedhw_reshw
-        WHERE
-            sh.building_storedhw IS NULL
-            AND (:nameLike IS NULL OR h.name_hardware LIKE '%' || :nameLike || '%')
-            AND (:type IS NULL OR h.type_hardware = :type)
-            AND (:building IS NULL OR sh.building_storedhw = :building)
+                sh.building_storedhw IS NULL
+                AND (:nameLike IS NULL
+                    OR h.name_hardware LIKE CONCAT('%', :nameLike, '%')
+                )
+                AND (:type IS NULL
+                    OR h.type_hardware = :type
+                )
+                AND (:building IS NULL
+                    OR sh.building_storedhw = :building
+                )
+                AND (:dayChar IS NULL
+                    OR sh.schedule_storedhw LIKE CONCAT('%', :dayChar, '%')
+                    AND CAST(SUBSTRING(sh.schedule_storedhw, POSITION(:dayChar IN sh.schedule_storedhw) + 1, 2) AS INTEGER) <= EXTRACT(HOUR FROM CAST(:startDate AS TIMESTAMP))
+                    AND CAST(SUBSTRING(sh.schedule_storedhw, POSITION(:dayChar IN sh.schedule_storedhw) + 4, 2) AS INTEGER) >= EXTRACT(HOUR FROM CAST(:endDate AS TIMESTAMP))
+                )
         """,
         nativeQuery = true
     )
@@ -88,6 +100,7 @@ public interface StoredHardwareRepository extends JpaRepository<StoredHardware, 
         String nameLike,
         String type,
         Short building,
+        String dayChar,
         Instant startDate,
         Instant endDate,
         Pageable pageable
