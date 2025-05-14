@@ -80,7 +80,7 @@ public class OperationQueryController {
      * @param ascOrder  Flag to indicate if the results should be ordered in ascending order (assumed true).
      * @return          List of available spaces matching the filters.
      */
-    @GetMapping("/hardware/availavility")
+    @GetMapping("/hardware/availability")
     public List<StoredHardwareListEntry> getAvailableItems(
         @RequestParam(required = false) String nameLike,
         @RequestParam(required = false) String type,
@@ -125,7 +125,7 @@ public class OperationQueryController {
      * @param ascOrder  Flag to indicate if the results should be ordered in ascending order (assumed true).
      * @return          List of available spaces matching the filters.
      */
-    @GetMapping("/space/availavility")
+    @GetMapping("/space/availability")
     public List<SpaceListEntry> getAvailableSpaces(
         @RequestParam(required = false) String nameLike,
         @RequestParam(required = false) String type,
@@ -139,7 +139,7 @@ public class OperationQueryController {
         @RequestParam(required = false) String orderBy,
         @RequestParam(required = false) Boolean ascOrder
     ) {
-        return this.spaceService.get(
+        List<SpaceListEntry> list = this.spaceService.get(
                 nameLike,
                 type,
                 capacity,
@@ -155,6 +155,8 @@ public class OperationQueryController {
             .stream()
             .map(SpaceListEntry::from)
             .toList();
+        
+        return list;
     };
 
     /**
