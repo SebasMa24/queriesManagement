@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.quantumdev.integraservicios.database.model.ERole;
 import com.quantumdev.integraservicios.database.model.ReservedHardware;
+import com.quantumdev.integraservicios.database.model.ReservedSpace;
 import com.quantumdev.integraservicios.queriesManagement.Service.ReservedHardwareService;
 import com.quantumdev.integraservicios.queriesManagement.Service.ReservedSpaceService;
 import com.quantumdev.integraservicios.queriesManagement.Service.SpaceService;
@@ -53,6 +54,16 @@ public class OperationQueryController {
     @GetMapping("/hardware/{id}")
     public ReservedHardware getReservedHardware(@PathVariable Long id) {
         return this.reservedHardwareService.getById(id);
+    }
+
+    /**
+     * Retrieves a reserved space by its ID.
+     * @param id  ID of the reserved space.
+     * @return    ReservedHardware object if found, null otherwise.
+     */
+    @GetMapping("/space/{id}")
+    public ReservedSpace getReservedSpace(@PathVariable Long id) {
+        return this.reservedSpaceService.getById(id);
     }
 
     /**

@@ -24,6 +24,17 @@ public class ReservedSpaceService {
     private ReservedSpaceRepository reservedSpaceRepository;
 
     /**
+     * Retrieves a reserved space by its ID.
+     * @param id The ID of the reserved space to retrieve.
+     * @return ReservedHardware object representing the reserved space with the given ID, or null if not found.
+     */
+    public ReservedSpace getById(Long id) {
+        return this.reservedSpaceRepository
+                    .findById(id)
+                    .orElse(null);
+    }
+
+    /**
      * Retrieves the history of reserved spaces based on the provided filters.
      * @param email     Email of the user requesting the history.
      * @param nameLike  Partial name of the space to search for (optional).
