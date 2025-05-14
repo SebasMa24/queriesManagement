@@ -90,35 +90,20 @@ public class SpaceService {
         if (startDateTime.getDayOfYear() != endDateTime.getDayOfYear())
             throw new IllegalArgumentException("Reservations can only be made for a single day.");
 
+        // Determine the day of the week for the start date.
+        String dayChar = ScheduleEntry.DAY_MAP.get(startDateTime.getDayOfWeek()).toString();
+
         // Get the list of non-reserved spaces within the specified date range.
-        List<Space> spaces = this.spaceRepository.getNonReserved(
+        return this.spaceRepository.getNonReserved(
                     nameLike,
                     type,
                     capacity,
                     building,
+                    dayChar,
                     startDate,
                     endDate,
                     pageable
                 );
-
-        // Fitler out spaces whose schedule entries are not contained in the specified date range.
-        spaces.removeIf(space -> {
-            boolean remove = true;
-            // For each space, check if any of its schedule entries are contained in the specified date range.
-            for (ScheduleEntry entry : space.getSchedule()) {
-                if (entry.getDay() != startDateTime.getDayOfWeek())
-                    continue;
-                if (    entry.getStart().compareTo(startDateTime.toLocalTime()) <= 0
-                     && entry.getEnd().compareTo(endDateTime.toLocalTime()) >= 0
-                   ) {
-                    remove = false; // Found a contained entry, do not remove the space.
-                    break;
-                }
-            }
-            return remove; // Remove is true if no contained entry was found.
-        });
-
-        return spaces;
     }
     
 }

@@ -31,14 +31,14 @@ public interface SpaceRepository extends JpaRepository<Space, SpaceId> {
      */
     @Query(
         value = """
-        SELECT s.*
-        FROM Space s
-        WHERE
-            (:nameLike IS NULL OR s.name_space LIKE '%' || :nameLike || '%')
-            AND (:type IS NULL OR s.type_space = :type)
-            AND (:capacity IS NULL OR s.capacity_space >= :capacity)
-            AND (:building IS NULL OR s.building_space = :building)
-        """,
+            SELECT s.*
+            FROM Space s
+            WHERE
+                (:nameLike IS NULL OR s.name_space LIKE CONCAT('%', :nameLike, '%'))
+                AND (:type IS NULL OR s.type_space = :type)
+                AND (:capacity IS NULL OR s.capacity_space >= :capacity)
+                AND (:building IS NULL OR s.building_space = :building)
+            """,
         nativeQuery = true
     )
     public List<Space> get(
@@ -68,20 +68,33 @@ public interface SpaceRepository extends JpaRepository<Space, SpaceId> {
                     r.space_resspace
                 FROM ReservedSpace r
                 WHERE
-                    r.start_resspace < :endDate
-                    AND r.end_resspace > :startDate
+                    r.start_resspace < CAST(:endDate AS TIMESTAMP)
+                    AND r.end_resspace > CAST(:startDate AS TIMESTAMP)
             )
-            SELECT s.*
-            FROM Space s
-            LEFT OUTER JOIN rs ON
-                s.building_space = rs.building_resspace
-                AND s.code_space = rs.space_resspace
+            SELECT sp.*
+            FROM Space sp
+            LEFT OUTER JOIN rs
+                ON sp.building_space = rs.building_resspace
+                AND sp.code_space = rs.space_resspace
             WHERE
-                rs.building_resspace IS NULL
-                AND (:nameLike IS NULL OR s.name_space LIKE '%' || :nameLike || '%')
-                AND (:type IS NULL OR s.type_space = :type)
-                AND (:capacity IS NULL OR s.capacity_space >= :capacity)
-                AND (:building IS NULL OR s.building_space = :building)
+                rs.space_resspace IS NULL
+                AND (:nameLike IS NULL
+                    OR sp.name_space LIKE CONCAT('%', :nameLike, '%')
+                )
+                AND (:type IS NULL
+                    OR sp.type_space = :type
+                )
+                AND (:capacity IS NULL
+                    OR sp.capacity_space >= :capacity
+                )
+                AND (:building IS NULL
+                    OR sp.building_space = :building
+                )
+                AND (:dayChar IS NULL
+                    OR sp.schedule_space LIKE CONCAT('%', :dayChar, '%')
+                    AND CAST(SUBSTRING(sp.shcedule_space, POSITION(:dayChar IN sp.schedule_space) + 1, 2) AS INTEGER) <= EXTRACT(HOUR FROM CAST(:startDate AS TIMESTAMP))
+                    AND CAST(SUBSTRING(sp.schedule_space, POSITION(:dayChar IN sp.schedule_space) + 4, 2) AS INTEGER) >= EXTRACT(HOUR FROM CAST(:endDate AS TIMESTAMP))
+                )
         """,
         nativeQuery = true
     )
@@ -90,6 +103,7 @@ public interface SpaceRepository extends JpaRepository<Space, SpaceId> {
         String type,
         Short capacity,
         Short building,
+        String dayChar,
         Instant startDate,
         Instant endDate,
         Pageable pageable
