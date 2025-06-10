@@ -3,7 +3,6 @@ package com.quantumdev.integraservicios.queriesManagement.Service;
 import java.time.Instant;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -12,16 +11,18 @@ import org.springframework.stereotype.Service;
 import com.quantumdev.integraservicios.database.model.ReservedSpace;
 import com.quantumdev.integraservicios.database.repository.ReservedSpaceRepository;
 
+import lombok.RequiredArgsConstructor;
+
 /**
  * ReservedSpaceService is a service that provides methods to query reserved spaces in the system.
  * It allows filtering based on various criteria such as email, name, type, capacity, building, and reservation dates.
  * @author Nicolás Sabogal
  */
 @Service
+@RequiredArgsConstructor
 public class ReservedSpaceService {
 
-    @Autowired
-    private ReservedSpaceRepository reservedSpaceRepository;
+    private final ReservedSpaceRepository reservedSpaceRepository;
 
     /**
      * Retrieves a reserved space by its ID.

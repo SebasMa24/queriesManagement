@@ -15,10 +15,11 @@ import com.quantumdev.integraservicios.queriesManagement.response.ReservedSpaceL
 import com.quantumdev.integraservicios.queriesManagement.response.SpaceListEntry;
 import com.quantumdev.integraservicios.queriesManagement.response.StoredHardwareListEntry;
 
+import lombok.RequiredArgsConstructor;
+
 import java.util.List;
 import java.time.Instant;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,20 +32,17 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @author Nicolás Sabogal
  */
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/operations")
 public class OperationQueryController {
 
-    @Autowired
-    private SpaceService spaceService;
+    private final SpaceService spaceService;
 
-    @Autowired
-    private StoredHardwareService storedHardwareService;
+    private final StoredHardwareService storedHardwareService;
 
-    @Autowired
-    private ReservedHardwareService reservedHardwareService;
+    private final ReservedHardwareService reservedHardwareService;
 
-    @Autowired
-    private ReservedSpaceService reservedSpaceService;
+    private final ReservedSpaceService reservedSpaceService;
 
     /**
      * Retrieves a reserved hardware item by its ID.

@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -15,16 +14,18 @@ import com.quantumdev.integraservicios.database.model.ScheduleEntry;
 import com.quantumdev.integraservicios.database.model.StoredHardware;
 import com.quantumdev.integraservicios.database.repository.StoredHardwareRepository;
 
+import lombok.RequiredArgsConstructor;
+
 /**
  * Service class for managing stored hardware items.
  * This class provides methods to retrieve available items based on various criteria.
  * @author Nicolás Sabogal
  */
 @Service
+@RequiredArgsConstructor
 public class StoredHardwareService {
 
-    @Autowired
-    private StoredHardwareRepository storedHardwareRepository;
+    private final StoredHardwareRepository storedHardwareRepository;
 
     /**
      * Retrieves a list of stored hardware items based on the provided criteria.

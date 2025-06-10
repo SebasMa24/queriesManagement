@@ -3,7 +3,6 @@ package com.quantumdev.integraservicios.queriesManagement.Service;
 import java.time.Instant;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -12,16 +11,18 @@ import org.springframework.stereotype.Service;
 import com.quantumdev.integraservicios.database.model.ReservedHardware;
 import com.quantumdev.integraservicios.database.repository.ReservedHardwareRepository;
 
+import lombok.RequiredArgsConstructor;
+
 /**
  * ReservedHardwareService is a service that provides methods to query reserved hardware in the system.
  * It allows filtering based on various criteria such as email, name, type, building, and reservation dates.
  * @author Nicolás Sabogal
  */
 @Service
+@RequiredArgsConstructor
 public class ReservedHardwareService {
 
-    @Autowired
-    private ReservedHardwareRepository reservedHardwareRepository;
+    private final ReservedHardwareRepository reservedHardwareRepository;
 
     /**
      * Retrieves a reserved hardware item by its ID.
