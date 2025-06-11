@@ -21,7 +21,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/domains")
-public class DomainQueryService {
+public class DomainQueryController {
 
     /** Repository for accessing building data. */
     private final DomainService buildingService; 
