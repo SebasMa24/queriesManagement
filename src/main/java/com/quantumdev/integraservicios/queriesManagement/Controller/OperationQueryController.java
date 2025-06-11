@@ -36,12 +36,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/api/operations")
 public class OperationQueryController {
 
+    /** Service for managing space-related queries. */
     private final SpaceService spaceService;
 
+    /** Service for managing stored hardware-related queries. */
     private final StoredHardwareService storedHardwareService;
 
+    /** Service for managing reserved hardware-related queries. */
     private final ReservedHardwareService reservedHardwareService;
 
+    /** Service for managing reserved space-related queries. */
     private final ReservedSpaceService reservedSpaceService;
 
     /**
