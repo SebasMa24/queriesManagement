@@ -38,4 +38,28 @@ public class DomainQueryService {
                 .toList();
     }
     
+    /**
+     * Retrieves a list of all hardware types in the system.
+     * 
+     * @return a list of hardware type names.
+     */
+    @GetMapping("/hardware-types")
+    public List<String> getHardwareTypesDomain() {
+        return buildingService.getAllHardwareTypes().stream()
+                .map(hardwareType -> hardwareType.getName())
+                .toList();
+    }
+
+    /**
+     * Retrieves a list of all space types in the system.
+     * 
+     * @return a list of space type names.
+     */
+    @GetMapping("/space-types")
+    public List<String> getSpaceTypesDomain() {
+        return buildingService.getAllSpaceTypes().stream()
+                .map(spaceType -> spaceType.getName())
+                .toList();
+    }
+    
 }
