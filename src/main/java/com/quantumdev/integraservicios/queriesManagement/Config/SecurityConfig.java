@@ -28,7 +28,7 @@ public class SecurityConfig {
                     .requestMatchers("/swagger-ui/**").permitAll()
                     .requestMatchers("/v3/api-docs/**").permitAll()
                     .requestMatchers("/api/domains/**").permitAll()
-                    .requestMatchers("/api/operations/**").hasAnyAuthority()
+                    .requestMatchers("/api/operations/**").authenticated()
                     .anyRequest().hasAuthority(ERole.ROLE_ADMIN.name())
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
