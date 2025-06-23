@@ -13,6 +13,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import com.quantumdev.integraservicios.database.model.*;
 import com.quantumdev.integraservicios.queriesManagement.Controller.OperationQueryController;
@@ -208,7 +210,7 @@ public class OperationQueryControllerTests {
         when(reservedHardwareService.getById(hardwareId)).thenReturn(mockReservedHardware);
         
         // Act
-        ReservedHardware result = operationQueryController.getReservedHardware(hardwareId);
+        ReservedHardware result = (ReservedHardware)operationQueryController.getReservedHardware(hardwareId).getBody();
         
         // Assert
         assertNotNull(result);
@@ -223,23 +225,24 @@ public class OperationQueryControllerTests {
         when(reservedHardwareService.getById(hardwareId)).thenReturn(null);
         
         // Act
-        ReservedHardware result = operationQueryController.getReservedHardware(hardwareId);
-        
+        ReservedHardware result = (ReservedHardware)operationQueryController.getReservedHardware(hardwareId).getBody();
+
         // Assert
         assertNull(result);
         verify(reservedHardwareService).getById(hardwareId);
     }
     
     @Test
-    void testGetReservedHardware_ServiceThrowsException_ExceptionPropagated() {
+    void testGetReservedHardware_ServiceThrowsException_ReturnsServerError() {
         // Arrange
         Long hardwareId = 1L;
         when(reservedHardwareService.getById(hardwareId)).thenThrow(new RuntimeException("Database error"));
         
-        // Act & Assert
-        assertThrows(RuntimeException.class, () -> {
-            operationQueryController.getReservedHardware(hardwareId);
-        });
+        // Act
+        ResponseEntity<?> response = operationQueryController.getReservedHardware(hardwareId);
+        
+        // Assert
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
         verify(reservedHardwareService).getById(hardwareId);
     }
     
@@ -251,8 +254,8 @@ public class OperationQueryControllerTests {
         when(reservedSpaceService.getById(spaceId)).thenReturn(mockReservedSpace);
         
         // Act
-        ReservedSpace result = operationQueryController.getReservedSpace(spaceId);
-        
+        ReservedSpace result = (ReservedSpace)operationQueryController.getReservedSpace(spaceId).getBody();
+
         // Assert
         assertNotNull(result);
         assertEquals(mockReservedSpace, result);
@@ -266,23 +269,24 @@ public class OperationQueryControllerTests {
         when(reservedSpaceService.getById(spaceId)).thenReturn(null);
         
         // Act
-        ReservedSpace result = operationQueryController.getReservedSpace(spaceId);
-        
+        ReservedSpace result = (ReservedSpace)operationQueryController.getReservedSpace(spaceId).getBody();
+
         // Assert
         assertNull(result);
         verify(reservedSpaceService).getById(spaceId);
     }
     
     @Test
-    void testGetReservedSpace_ServiceThrowsException_ExceptionPropagated() {
+    void testGetReservedSpace_ServiceThrowsException_ReturnsServerError() {
         // Arrange
         Long spaceId = 1L;
         when(reservedSpaceService.getById(spaceId)).thenThrow(new RuntimeException("Database error"));
         
-        // Act & Assert
-        assertThrows(RuntimeException.class, () -> {
-            operationQueryController.getReservedSpace(spaceId);
-        });
+        // Act
+        ResponseEntity<?> response = operationQueryController.getReservedSpace(spaceId);
+        
+        // Assert
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
         verify(reservedSpaceService).getById(spaceId);
     }
     
@@ -295,10 +299,10 @@ public class OperationQueryControllerTests {
             .thenReturn(mockStoredHardwareList);
         
         // Act
-        List<StoredHardwareListEntry> result = operationQueryController.getAvailableItems(
-            "Dell", "Laptop", (short) 1, Instant.now(), Instant.now().plusSeconds(3600), 
+        List<StoredHardwareListEntry> result = (List<StoredHardwareListEntry>)operationQueryController.getAvailableItems(
+            "Dell", "Laptop", (short) 1, Instant.now(), Instant.now().plusSeconds(3600),
             false, 10, 0, "name", false
-        );
+        ).getBody();
         
         // Assert
         assertNotNull(result);
@@ -314,9 +318,9 @@ public class OperationQueryControllerTests {
             .thenReturn(mockStoredHardwareList);
         
         // Act
-        List<StoredHardwareListEntry> result = operationQueryController.getAvailableItems(
+        List<StoredHardwareListEntry> result = (List<StoredHardwareListEntry>)operationQueryController.getAvailableItems(
             null, null, null, null, null, null, 10, 0, null, null
-        );
+        ).getBody();
         
         // Assert
         assertNotNull(result);
@@ -331,10 +335,10 @@ public class OperationQueryControllerTests {
             .thenReturn(Collections.emptyList());
         
         // Act
-        List<StoredHardwareListEntry> result = operationQueryController.getAvailableItems(
+        List<StoredHardwareListEntry> result = (List<StoredHardwareListEntry>)operationQueryController.getAvailableItems(
             null, null, null, null, null, null, 10, 0, null, null
-        );
-        
+        ).getBody();
+
         // Assert
         assertNotNull(result);
         assertTrue(result.isEmpty());
@@ -350,11 +354,11 @@ public class OperationQueryControllerTests {
             .thenReturn(mockSpaceList);
         
         // Act
-        List<SpaceListEntry> result = operationQueryController.getAvailableSpaces(
-            "Computer", "Laboratory", (short) 30, (short) 1, Instant.now(), 
+        List<SpaceListEntry> result = (List<SpaceListEntry>)operationQueryController.getAvailableSpaces(
+            "Computer", "Laboratory", (short) 30, (short) 1, Instant.now(),
             Instant.now().plusSeconds(3600), false, 10, 0, "name", true
-        );
-        
+        ).getBody();
+
         // Assert
         assertNotNull(result);
         assertEquals(1, result.size());
@@ -369,10 +373,10 @@ public class OperationQueryControllerTests {
             .thenReturn(mockSpaceList);
         
         // Act
-        List<SpaceListEntry> result = operationQueryController.getAvailableSpaces(
+        List<SpaceListEntry> result = (List<SpaceListEntry>)operationQueryController.getAvailableSpaces(
             null, null, null, null, null, null, null, 10, 0, null, null
-        );
-        
+        ).getBody();
+
         // Assert
         assertNotNull(result);
         assertEquals(1, result.size());
@@ -386,10 +390,10 @@ public class OperationQueryControllerTests {
             .thenReturn(Collections.emptyList());
         
         // Act
-        List<SpaceListEntry> result = operationQueryController.getAvailableSpaces(
+        List<SpaceListEntry> result = (List<SpaceListEntry>)operationQueryController.getAvailableSpaces(
             null, null, null, null, null, null, null, 10, 0, null, null
-        );
-        
+        ).getBody();
+
         // Assert
         assertNotNull(result);
         assertTrue(result.isEmpty());
@@ -413,18 +417,20 @@ public class OperationQueryControllerTests {
             mocked.when(SecurityContextHolder::getContext).thenReturn(mockSecurityContext);
             
             // Act
-            List<ReservedHardwareListEntry> result = operationQueryController.getItemHistory(
-                "admin@university.edu", "Dell", "Laptop", (short) 1, Instant.now(), 
+            List<ReservedHardwareListEntry> result = (List<ReservedHardwareListEntry>)operationQueryController.getItemHistory(
+                "admin@university.edu", "Dell", "Laptop", (short) 1, Instant.now(),
                 Instant.now().plusSeconds(3600), 10, 0, "name", true
-            );
-            
+            ).getBody();
+
             // Assert
             assertNotNull(result);
             assertEquals(1, result.size());
             verify(reservedHardwareService).get(any(), any(), any(), any(), any(), any(), any(), any(), any(), any());
         }
-    }      @Test
-    void testGetItemHistory_AsUser_WithEmailParam_ThrowsException() {
+    }
+    
+    @Test
+    void testGetItemHistory_AsUser_WithEmailParam_ReturnsForbidden() {
         // Arrange
         when(mockUserDetails.getAuthorities()).thenReturn((Collection) Arrays.asList(mockAuthority));
         when(mockAuthentication.getPrincipal()).thenReturn(mockUserDetails);
@@ -433,15 +439,17 @@ public class OperationQueryControllerTests {
         try (MockedStatic<SecurityContextHolder> mocked = mockStatic(SecurityContextHolder.class)) {
             mocked.when(SecurityContextHolder::getContext).thenReturn(mockSecurityContext);
             
-            // Act & Assert
-            assertThrows(IllegalArgumentException.class, () -> {
-                operationQueryController.getItemHistory(
-                    "other@university.edu", null, null, null, null, null, 10, 0, null, null
-                );
-            });
+            // Act
+            ResponseEntity<?> response = operationQueryController.getItemHistory(
+                "other@university.edu", null, null, null, null, null, 10, 0, null, null
+            );
+            
+            // Assert
+            assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
         }
     }
-      @Test
+
+    @Test
     void testGetItemHistory_AsUser_WithoutEmailParam_ReturnsUserHistory() {
         // Arrange
         when(mockUserDetails.getUsername()).thenReturn("user@university.edu");
@@ -457,10 +465,10 @@ public class OperationQueryControllerTests {
             mocked.when(SecurityContextHolder::getContext).thenReturn(mockSecurityContext);
             
             // Act
-            List<ReservedHardwareListEntry> result = operationQueryController.getItemHistory(
+            List<ReservedHardwareListEntry> result = (List<ReservedHardwareListEntry>)operationQueryController.getItemHistory(
                 null, null, null, null, null, null, 10, 0, null, null
-            );
-            
+            ).getBody();
+
             // Assert
             assertNotNull(result);
             assertEquals(1, result.size());
@@ -485,11 +493,11 @@ public class OperationQueryControllerTests {
             mocked.when(SecurityContextHolder::getContext).thenReturn(mockSecurityContext);
             
             // Act
-            List<ReservedSpaceListEntry> result = operationQueryController.getSpaceHistory(
+            List<ReservedSpaceListEntry> result = (List<ReservedSpaceListEntry>)operationQueryController.getSpaceHistory(
                 "admin@university.edu", "Computer", "Laboratory", (short) 30, (short) 1, 
                 Instant.now(), Instant.now().plusSeconds(3600), 10, 0, "name", true
-            );
-            
+            ).getBody();
+
             // Assert
             assertNotNull(result);
             assertEquals(1, result.size());
@@ -498,7 +506,7 @@ public class OperationQueryControllerTests {
     }
     
     @Test
-    void testGetSpaceHistory_AsUser_WithEmailParam_ThrowsException() {
+    void testGetSpaceHistory_AsUser_WithEmailParam_ReturnsForbidden() {
         // Arrange
         when(mockUserDetails.getAuthorities()).thenReturn((Collection) Arrays.asList(mockAuthority));
         when(mockAuthentication.getPrincipal()).thenReturn(mockUserDetails);
@@ -507,12 +515,13 @@ public class OperationQueryControllerTests {
         try (MockedStatic<SecurityContextHolder> mocked = mockStatic(SecurityContextHolder.class)) {
             mocked.when(SecurityContextHolder::getContext).thenReturn(mockSecurityContext);
             
-            // Act & Assert
-            assertThrows(IllegalArgumentException.class, () -> {
-                operationQueryController.getSpaceHistory(
-                    "other@university.edu", null, null, null, null, null, null, 10, 0, null, null
-                );
-            });
+            // Act
+            ResponseEntity<?> response = operationQueryController.getSpaceHistory(
+                "other@university.edu", null, null, null, null, null, null, 10, 0, null, null
+            );
+            
+            // Assert
+            assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
         }
     }
     
@@ -532,10 +541,10 @@ public class OperationQueryControllerTests {
             mocked.when(SecurityContextHolder::getContext).thenReturn(mockSecurityContext);
             
             // Act
-            List<ReservedSpaceListEntry> result = operationQueryController.getSpaceHistory(
+            List<ReservedSpaceListEntry> result = (List<ReservedSpaceListEntry>)operationQueryController.getSpaceHistory(
                 null, null, null, null, null, null, null, 10, 0, null, null
-            );
-            
+            ).getBody();
+
             // Assert
             assertNotNull(result);
             assertEquals(1, result.size());

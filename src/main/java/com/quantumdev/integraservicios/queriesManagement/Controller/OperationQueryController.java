@@ -20,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import java.util.List;
 import java.time.Instant;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -54,8 +55,13 @@ public class OperationQueryController {
      * @return    ReservedHardware object if found, null otherwise.
      */
     @GetMapping("/hardware/{id}")
-    public ReservedHardware getReservedHardware(@PathVariable Long id) {
-        return this.reservedHardwareService.getById(id);
+    public ResponseEntity<?> getReservedHardware(@PathVariable Long id) {
+        try {
+            ReservedHardware reservedHardware = this.reservedHardwareService.getById(id);
+            return ResponseEntity.ok(reservedHardware);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("An unexpected error occurred: " + e.getMessage());
+        }
     }
 
     /**
@@ -64,8 +70,13 @@ public class OperationQueryController {
      * @return    ReservedHardware object if found, null otherwise.
      */
     @GetMapping("/space/{id}")
-    public ReservedSpace getReservedSpace(@PathVariable Long id) {
-        return this.reservedSpaceService.getById(id);
+    public ResponseEntity<?> getReservedSpace(@PathVariable Long id) {
+        try {
+            ReservedSpace reservedSpace = this.reservedSpaceService.getById(id);
+            return ResponseEntity.ok(reservedSpace);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("An unexpected error occurred: " + e.getMessage());
+        }
     }
 
     /**
@@ -83,7 +94,7 @@ public class OperationQueryController {
      * @return          List of available spaces matching the filters.
      */
     @GetMapping("/hardware/availability")
-    public List<StoredHardwareListEntry> getAvailableItems(
+    public ResponseEntity<?> getAvailableItems(
         @RequestParam(required = false) String nameLike,
         @RequestParam(required = false) String type,
         @RequestParam(required = false) Short building,
@@ -95,22 +106,30 @@ public class OperationQueryController {
         @RequestParam(required = false) String orderBy,
         @RequestParam(required = false) Boolean descOrder
     ) {
-        return this.storedHardwareService.get(
-                nameLike,
-                type,
-                building,
-                startDate,
-                endDate,
-                getAll,
-                qSize,
-                qPage,
-                orderBy,
-                descOrder
-            )
-            .stream()
-            .map(StoredHardwareListEntry::from)
-            .toList();
-    };
+        try {
+            List<StoredHardwareListEntry> list = this.storedHardwareService.get(
+                    nameLike,
+                    type,
+                    building,
+                    startDate,
+                    endDate,
+                    getAll,
+                    qSize,
+                    qPage,
+                    orderBy,
+                    descOrder
+                )
+                .stream()
+                .map(StoredHardwareListEntry::from)
+                .toList();
+
+            return ResponseEntity.ok(list);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("An unexpected error occurred: " + e.getMessage());
+        }
+    }
 
     /**
      * Retrieves available spaces based on the provided filters.
@@ -128,7 +147,7 @@ public class OperationQueryController {
      * @return          List of available spaces matching the filters.
      */
     @GetMapping("/space/availability")
-    public List<SpaceListEntry> getAvailableSpaces(
+    public ResponseEntity<?> getAvailableSpaces(
         @RequestParam(required = false) String nameLike,
         @RequestParam(required = false) String type,
         @RequestParam(required = false) Short capacity,
@@ -141,24 +160,30 @@ public class OperationQueryController {
         @RequestParam(required = false) String orderBy,
         @RequestParam(required = false) Boolean ascOrder
     ) {
-        List<SpaceListEntry> list = this.spaceService.get(
-                nameLike,
-                type,
-                capacity,
-                building,
-                startDate,
-                endDate,
-                getAll,
-                qSize,
-                qPage,
-                orderBy,
-                ascOrder
-            )
-            .stream()
-            .map(SpaceListEntry::from)
-            .toList();
-        
-        return list;
+        try {
+            List<SpaceListEntry> list = this.spaceService.get(
+                    nameLike,
+                    type,
+                    capacity,
+                    building,
+                    startDate,
+                    endDate,
+                    getAll,
+                    qSize,
+                    qPage,
+                    orderBy,
+                    ascOrder
+                )
+                .stream()
+                .map(SpaceListEntry::from)
+                .toList();
+
+            return ResponseEntity.ok(list);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("An unexpected error occurred: " + e.getMessage());
+        }
     };
 
     /**
@@ -176,7 +201,7 @@ public class OperationQueryController {
      * @return          List of reserved hardware items matching the filters.
      */
     @GetMapping("/hardware")
-    public List<ReservedHardwareListEntry> getItemHistory(
+    public ResponseEntity<?> getItemHistory(
         @RequestParam(required = false) String email,
         @RequestParam(required = false) String nameLike,
         @RequestParam(required = false) String type,
@@ -195,25 +220,32 @@ public class OperationQueryController {
                 .anyMatch(a -> a.getAuthority().equals(ERole.ROLE_ADMIN.name()))
            ) {
             if (email != null)
-                throw new IllegalArgumentException("User not authorized to access this resource.");
+                return ResponseEntity.status(403).body("User not authorized to access this resource.");
+
             email = user.getUsername();
         }
 
-        return this.reservedHardwareService.get(
-                email,
-                nameLike,
-                type,
-                building,
-                startDate,
-                endDate,
-                qSize,
-                qPage,
-                orderBy,
-                ascOrder
-            )
-            .stream()
-            .map(ReservedHardwareListEntry::from)
-            .toList();
+        try {
+            List<ReservedHardwareListEntry> list = this.reservedHardwareService.get(
+                    email,
+                    nameLike,
+                    type,
+                    building,
+                    startDate,
+                    endDate,
+                    qSize,
+                    qPage,
+                    orderBy,
+                    ascOrder
+                )
+                .stream()
+                .map(ReservedHardwareListEntry::from)
+                .toList();
+
+            return ResponseEntity.ok(list);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("An unexpected error occurred: " + e.getMessage());
+        }
     };
 
     /**
@@ -232,7 +264,7 @@ public class OperationQueryController {
      * @return          List of reserved spaces matching the filters.
      */
     @GetMapping("/space")
-    public List<ReservedSpaceListEntry> getSpaceHistory(
+    public ResponseEntity<?> getSpaceHistory(
         @RequestParam(required = false) String email,
         @RequestParam(required = false) String nameLike,
         @RequestParam(required = false) String type,
@@ -252,11 +284,12 @@ public class OperationQueryController {
                 .anyMatch(a -> a.getAuthority().equals(ERole.ROLE_ADMIN.name()))
            ) {
             if (email != null)
-                throw new IllegalArgumentException("User not authorized to access this resource.");
+                return ResponseEntity.status(403).body("User not authorized to access this resource.");
             email = user.getUsername();
         }
 
-        return this.reservedSpaceService.get(
+        try {
+            List<ReservedSpaceListEntry> list = this.reservedSpaceService.get(
                 email,
                 nameLike,
                 type,
@@ -272,6 +305,11 @@ public class OperationQueryController {
             .stream()
             .map(ReservedSpaceListEntry::from)
             .toList();
-    };
+
+            return ResponseEntity.ok(list);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("An unexpected error occurred: " + e.getMessage());
+        }
+    }
 
 }
