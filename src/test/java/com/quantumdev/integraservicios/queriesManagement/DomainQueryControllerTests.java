@@ -6,6 +6,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import com.quantumdev.integraservicios.database.model.*;
 import com.quantumdev.integraservicios.queriesManagement.Controller.DomainQueryController;
@@ -19,6 +21,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+@SuppressWarnings({"unchecked"})
 @ExtendWith(MockitoExtension.class)
 public class DomainQueryControllerTests {
     
@@ -60,25 +63,6 @@ public class DomainQueryControllerTests {
             .description("Computer lab for students")
             .build();
     }
-      // Tests for getFaculties method (assuming it uses a separate faculty service)
-    @Test
-    void testGetFaculties_ValidRequest_ReturnsFacultyList() {
-        // This test would need to be implemented when the actual controller method is available
-        // For now, we'll skip faculty tests as DomainService doesn't have getAllFaculties method
-        assertTrue(true, "Placeholder for getFaculties tests");
-    }
-    
-    @Test
-    void testGetFaculties_EmptyList_ReturnsEmptyList() {
-        // This test would need to be implemented when the actual controller method is available
-        assertTrue(true, "Placeholder for getFaculties empty list test");
-    }
-    
-    @Test
-    void testGetFaculties_ServiceThrowsException_ExceptionPropagated() {
-        // This test would need to be implemented when the actual controller method is available
-        assertTrue(true, "Placeholder for getFaculties exception test");
-    }
     
     // Tests for getBuildings method
     @Test
@@ -88,8 +72,8 @@ public class DomainQueryControllerTests {
         when(domainService.getAllBuildings()).thenReturn(mockBuildingList);
         
         // Act
-        List<BuildingListEntry> result = domainQueryController.getBuildingsDomain();
-        
+        List<BuildingListEntry> result = (List<BuildingListEntry>) domainQueryController.getBuildingsDomain().getBody();
+
         // Assert
         assertNotNull(result);
         assertEquals(1, result.size());
@@ -103,8 +87,8 @@ public class DomainQueryControllerTests {
         when(domainService.getAllBuildings()).thenReturn(Collections.emptyList());
         
         // Act
-        List<BuildingListEntry> result = domainQueryController.getBuildingsDomain();
-        
+        List<BuildingListEntry> result = (List<BuildingListEntry>) domainQueryController.getBuildingsDomain().getBody();
+
         // Assert
         assertNotNull(result);
         assertTrue(result.isEmpty());
@@ -112,36 +96,18 @@ public class DomainQueryControllerTests {
     }
     
     @Test
-    void testGetBuildings_ServiceThrowsException_ExceptionPropagated() {
+    void testGetBuildings_ServiceThrowsException_ReturnsServerError() {
         // Arrange
         when(domainService.getAllBuildings()).thenThrow(new RuntimeException("Database error"));
-        
-        // Act & Assert
-        assertThrows(RuntimeException.class, () -> {
-            domainQueryController.getBuildingsDomain();
-        });
-        verify(domainService).getAllBuildings();
+
+        // Act
+        ResponseEntity<?> response = domainQueryController.getBuildingsDomain();
+
+        // Assert
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+        assertTrue(response.getBody().toString().contains("Unexpected error occurred while retrieving buildings"));
     }
-      // Tests for getStates method (assuming it uses a separate state service)
-    @Test
-    void testGetStates_ValidRequest_ReturnsStateList() {
-        // This test would need to be implemented when the actual controller method is available
-        // For now, we'll skip state tests as DomainService doesn't have getAllStates method
-        assertTrue(true, "Placeholder for getStates tests");
-    }
-    
-    @Test
-    void testGetStates_EmptyList_ReturnsEmptyList() {
-        // This test would need to be implemented when the actual controller method is available
-        assertTrue(true, "Placeholder for getStates empty list test");
-    }
-    
-    @Test
-    void testGetStates_ServiceThrowsException_ExceptionPropagated() {
-        // This test would need to be implemented when the actual controller method is available
-        assertTrue(true, "Placeholder for getStates exception test");
-    }
-    
+
     // Tests for getHardwareTypes method
     @Test
     void testGetHardwareTypes_ValidRequest_ReturnsHardwareTypeList() {
@@ -150,8 +116,8 @@ public class DomainQueryControllerTests {
         when(domainService.getAllHardwareTypes()).thenReturn(mockHardwareTypeList);
         
         // Act
-        List<String> result = domainQueryController.getHardwareTypesDomain();
-        
+        List<String> result = (List<String>) domainQueryController.getHardwareTypesDomain().getBody();
+
         // Assert
         assertNotNull(result);
         assertEquals(1, result.size());
@@ -165,8 +131,8 @@ public class DomainQueryControllerTests {
         when(domainService.getAllHardwareTypes()).thenReturn(Collections.emptyList());
         
         // Act
-        List<String> result = domainQueryController.getHardwareTypesDomain();
-        
+        List<String> result = (List<String>) domainQueryController.getHardwareTypesDomain().getBody();
+
         // Assert
         assertNotNull(result);
         assertTrue(result.isEmpty());
@@ -174,14 +140,16 @@ public class DomainQueryControllerTests {
     }
     
     @Test
-    void testGetHardwareTypes_ServiceThrowsException_ExceptionPropagated() {
+    void testGetHardwareTypes_ServiceThrowsException_ReturnsServerError() {
         // Arrange
         when(domainService.getAllHardwareTypes()).thenThrow(new RuntimeException("Database error"));
-        
-        // Act & Assert
-        assertThrows(RuntimeException.class, () -> {
-            domainQueryController.getHardwareTypesDomain();
-        });
+
+        // Act
+        ResponseEntity<?> response = domainQueryController.getHardwareTypesDomain();
+
+        // Assert
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+        assertTrue(response.getBody().toString().contains("Unexpected error occurred while retrieving hardware types"));
         verify(domainService).getAllHardwareTypes();
     }
     
@@ -193,8 +161,8 @@ public class DomainQueryControllerTests {
         when(domainService.getAllSpaceTypes()).thenReturn(mockSpaceTypeList);
         
         // Act
-        List<String> result = domainQueryController.getSpaceTypesDomain();
-        
+        List<String> result = (List<String>) domainQueryController.getSpaceTypesDomain().getBody();
+
         // Assert
         assertNotNull(result);
         assertEquals(1, result.size());
@@ -208,8 +176,8 @@ public class DomainQueryControllerTests {
         when(domainService.getAllSpaceTypes()).thenReturn(Collections.emptyList());
         
         // Act
-        List<String> result = domainQueryController.getSpaceTypesDomain();
-        
+        List<String> result = (List<String>) domainQueryController.getSpaceTypesDomain().getBody();
+
         // Assert
         assertNotNull(result);
         assertTrue(result.isEmpty());
@@ -217,14 +185,16 @@ public class DomainQueryControllerTests {
     }
     
     @Test
-    void testGetSpaceTypes_ServiceThrowsException_ExceptionPropagated() {
+    void testGetSpaceTypes_ServiceThrowsException_ReturnsServerError() {
         // Arrange
         when(domainService.getAllSpaceTypes()).thenThrow(new RuntimeException("Database error"));
-        
-        // Act & Assert
-        assertThrows(RuntimeException.class, () -> {
-            domainQueryController.getSpaceTypesDomain();
-        });
+
+        // Act
+        ResponseEntity<?> response = domainQueryController.getSpaceTypesDomain();
+
+        // Assert
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+        assertTrue(response.getBody().toString().contains("Unexpected error occurred while retrieving space types"));
         verify(domainService).getAllSpaceTypes();
     }
     

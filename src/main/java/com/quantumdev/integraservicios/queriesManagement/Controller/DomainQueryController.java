@@ -2,6 +2,8 @@ package com.quantumdev.integraservicios.queriesManagement.Controller;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,10 +34,16 @@ public class DomainQueryController {
      * @return a list of BuildingListEntry objects representing the buildings.
      */
     @GetMapping("/buildings")
-    public List<BuildingListEntry> getBuildingsDomain() {
-        return buildingService.getAllBuildings().stream()
-                .map(BuildingListEntry::from)
-                .toList();
+    public ResponseEntity<?> getBuildingsDomain() {
+        try {
+            List<BuildingListEntry> buildings = buildingService.getAllBuildings().stream()
+                    .map(BuildingListEntry::from)
+                    .toList();
+
+            return ResponseEntity.ok(buildings);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Unexpected error occurred while retrieving buildings: " + e.getMessage());
+        }
     }
     
     /**
@@ -44,10 +52,16 @@ public class DomainQueryController {
      * @return a list of hardware type names.
      */
     @GetMapping("/hardware-types")
-    public List<String> getHardwareTypesDomain() {
-        return buildingService.getAllHardwareTypes().stream()
-                .map(hardwareType -> hardwareType.getName())
-                .toList();
+    public ResponseEntity<?> getHardwareTypesDomain() {
+        try {
+            List<String> hardwareTypes = buildingService.getAllHardwareTypes().stream()
+                    .map(hardwareType -> hardwareType.getName())
+                    .toList();
+
+            return ResponseEntity.ok(hardwareTypes);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Unexpected error occurred while retrieving hardware types: " + e.getMessage());
+        }
     }
 
     /**
@@ -56,10 +70,16 @@ public class DomainQueryController {
      * @return a list of space type names.
      */
     @GetMapping("/space-types")
-    public List<String> getSpaceTypesDomain() {
-        return buildingService.getAllSpaceTypes().stream()
-                .map(spaceType -> spaceType.getName())
-                .toList();
+    public ResponseEntity<?> getSpaceTypesDomain() {
+        try {
+            List<String> spaceTypes = buildingService.getAllSpaceTypes().stream()
+                    .map(spaceType -> spaceType.getName())
+                    .toList();
+
+            return ResponseEntity.ok(spaceTypes);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Unexpected error occurred while retrieving space types: " + e.getMessage());
+        }
     }
     
 }
