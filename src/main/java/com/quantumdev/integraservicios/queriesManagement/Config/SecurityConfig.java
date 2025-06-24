@@ -13,15 +13,30 @@ import com.quantumdev.integraservicios.queriesManagement.Jwt.JwtAuthenticationFi
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * Security configuration class for the application.
+ * Configures security settings, including CORS, CSRF, and request authorization.
+ * 
+ * @author Nicolás Sabogal
+ */
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
     
+    /** The JWT authentication filter to be applied to incoming requests */
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
+    /** The CORS configuration source to define allowed origins and methods */
     private final CorsConfigurationSource corsConfigurationSource;
 
+    /**
+     * Configures the security filter chain for the application.
+     * 
+     * @param http the HttpSecurity object to configure
+     * @return a SecurityFilterChain that defines security settings
+     * @throws Exception if an error occurs during configuration
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
                 return http

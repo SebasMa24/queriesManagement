@@ -10,12 +10,24 @@ import org.springframework.web.cors.CorsConfigurationSource;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * Configuration class for CORS settings.
+ * Allows requests from the frontend URL specified in the environment properties.
+ * 
+ * @author Nicolás Sabogal
+ */
 @Configuration
 @RequiredArgsConstructor
 public class WebConfig {
 
+    /** The environment to access properties */
     private final Environment environment;
 
+    /**
+     * Configures CORS settings for the application.
+     * 
+     * @return a CorsConfigurationSource that allows requests from the frontend URL
+     */
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         return request -> {
