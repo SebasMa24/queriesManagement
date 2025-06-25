@@ -37,18 +37,20 @@ public class ReservedSpaceService {
 
     /**
      * Retrieves the history of reserved spaces based on the provided filters.
-     * @param email     Email of the user requesting the history.
-     * @param nameLike  Partial name of the space to search for (optional).
-     * @param type      Type of the space (optional).
-     * @param capacity  Minimum capacity of the space (optional).
-     * @param building  Building number where the space was located (optional).
-     * @param startDate Start date for the reservation period (optional).
-     * @param endDate   End date for the reservation period (optional).
-     * @param qSize     Number of reservations to retrieve per page.
-     * @param qPage     Page number to retrieve.
-     * @param orderBy   Field to order the results by (optional).
-     * @param ascOrder  Flag to indicate if the results should be ordered in ascending order (assumed true).
-     * @return          List of reserved spaces matching the filters.
+     * @param email        Email of the user requesting the history.
+     * @param nameLike     Partial name of the space to search for (optional).
+     * @param type         Type of the space (optional).
+     * @param capacity     Minimum capacity of the space (optional).
+     * @param building     Building number where the space was located (optional).
+     * @param startDate    Start date for the reservation period (optional).
+     * @param endDate      End date for the reservation period (optional).
+     * @param isHandedOver Flag to indicate if the space has been handed over (optional, show both if not provided).
+     * @param isReturned   Flag to indicate if the space has been returned (optional, show both if not provided).
+     * @param qSize        Number of reservations to retrieve per page.
+     * @param qPage        Page number to retrieve.
+     * @param orderBy      Field to order the results by (optional).
+     * @param ascOrder     Flag to indicate if the results should be ordered in ascending order (assumed true).
+     * @return             List of reserved spaces matching the filters.
      */
     public List<ReservedSpace> get(
         String email,
@@ -58,6 +60,8 @@ public class ReservedSpaceService {
         Short building,
         Instant startDate,
         Instant endDate,
+        Boolean isHandedOver,
+        Boolean isReturned,
         Integer qSize,
         Integer qPage,
         String orderBy,
@@ -86,6 +90,8 @@ public class ReservedSpaceService {
                 building,
                 startDate,
                 endDate,
+                isHandedOver,
+                isReturned,
                 pageable
             );
     }
