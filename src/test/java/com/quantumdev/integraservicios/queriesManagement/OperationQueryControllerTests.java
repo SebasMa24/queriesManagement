@@ -410,7 +410,7 @@ public class OperationQueryControllerTests {
         when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
         
         List<ReservedHardware> mockReservedList = Arrays.asList(mockReservedHardware);
-        when(reservedHardwareService.get(any(), any(), any(), any(), any(), any(), any(), any(), any(), any()))
+        when(reservedHardwareService.get(any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any()))
             .thenReturn(mockReservedList);
         
         try (MockedStatic<SecurityContextHolder> mocked = mockStatic(SecurityContextHolder.class)) {
@@ -419,13 +419,13 @@ public class OperationQueryControllerTests {
             // Act
             List<ReservedHardwareListEntry> result = (List<ReservedHardwareListEntry>)operationQueryController.getItemHistory(
                 "admin@university.edu", "Dell", "Laptop", (short) 1, Instant.now(),
-                Instant.now().plusSeconds(3600), 10, 0, "name", true
+                Instant.now().plusSeconds(3600), null, null, 10, 0, "name", true
             ).getBody();
 
             // Assert
             assertNotNull(result);
             assertEquals(1, result.size());
-            verify(reservedHardwareService).get(any(), any(), any(), any(), any(), any(), any(), any(), any(), any());
+            verify(reservedHardwareService).get(any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any());
         }
     }
     
@@ -441,7 +441,7 @@ public class OperationQueryControllerTests {
             
             // Act
             ResponseEntity<?> response = operationQueryController.getItemHistory(
-                "other@university.edu", null, null, null, null, null, 10, 0, null, null
+                "other@university.edu", null, null, null, null, null, null, null, 10, 0, null, null
             );
             
             // Assert
@@ -458,7 +458,7 @@ public class OperationQueryControllerTests {
         when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
         
         List<ReservedHardware> mockReservedList = Arrays.asList(mockReservedHardware);
-        when(reservedHardwareService.get(any(), any(), any(), any(), any(), any(), any(), any(), any(), any()))
+        when(reservedHardwareService.get(any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any()))
             .thenReturn(mockReservedList);
         
         try (MockedStatic<SecurityContextHolder> mocked = mockStatic(SecurityContextHolder.class)) {
@@ -466,13 +466,13 @@ public class OperationQueryControllerTests {
             
             // Act
             List<ReservedHardwareListEntry> result = (List<ReservedHardwareListEntry>)operationQueryController.getItemHistory(
-                null, null, null, null, null, null, 10, 0, null, null
+                null, null, null, null, null, null, null, null, 10, 0, null, null
             ).getBody();
 
             // Assert
             assertNotNull(result);
             assertEquals(1, result.size());
-            verify(reservedHardwareService).get(eq("user@university.edu"), any(), any(), any(), any(), any(), any(), any(), any(), any());
+            verify(reservedHardwareService).get(eq("user@university.edu"), any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any());
         }
     }
     
@@ -486,7 +486,7 @@ public class OperationQueryControllerTests {
         when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
         
         List<ReservedSpace> mockReservedSpaceList = Arrays.asList(mockReservedSpace);
-        when(reservedSpaceService.get(any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any()))
+        when(reservedSpaceService.get(any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any()))
             .thenReturn(mockReservedSpaceList);
         
         try (MockedStatic<SecurityContextHolder> mocked = mockStatic(SecurityContextHolder.class)) {
@@ -495,13 +495,13 @@ public class OperationQueryControllerTests {
             // Act
             List<ReservedSpaceListEntry> result = (List<ReservedSpaceListEntry>)operationQueryController.getSpaceHistory(
                 "admin@university.edu", "Computer", "Laboratory", (short) 30, (short) 1, 
-                Instant.now(), Instant.now().plusSeconds(3600), 10, 0, "name", true
+                Instant.now(), Instant.now().plusSeconds(3600), null, null, 10, 0, "name", true
             ).getBody();
 
             // Assert
             assertNotNull(result);
             assertEquals(1, result.size());
-            verify(reservedSpaceService).get(any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any());
+            verify(reservedSpaceService).get(any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any());
         }
     }
     
@@ -517,7 +517,7 @@ public class OperationQueryControllerTests {
             
             // Act
             ResponseEntity<?> response = operationQueryController.getSpaceHistory(
-                "other@university.edu", null, null, null, null, null, null, 10, 0, null, null
+                "other@university.edu", null, null, null, null, null, null, null, null, 10, 0, null, null
             );
             
             // Assert
@@ -534,7 +534,7 @@ public class OperationQueryControllerTests {
         when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
         
         List<ReservedSpace> mockReservedSpaceList = Arrays.asList(mockReservedSpace);
-        when(reservedSpaceService.get(any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any()))
+        when(reservedSpaceService.get(any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any()))
             .thenReturn(mockReservedSpaceList);
         
         try (MockedStatic<SecurityContextHolder> mocked = mockStatic(SecurityContextHolder.class)) {
@@ -542,13 +542,13 @@ public class OperationQueryControllerTests {
             
             // Act
             List<ReservedSpaceListEntry> result = (List<ReservedSpaceListEntry>)operationQueryController.getSpaceHistory(
-                null, null, null, null, null, null, null, 10, 0, null, null
+                null, null, null, null, null, null, null, null, null, 10, 0, null, null
             ).getBody();
 
             // Assert
             assertNotNull(result);
             assertEquals(1, result.size());
-            verify(reservedSpaceService).get(eq("user@university.edu"), any(), any(), any(), any(), any(), any(), any(), any(), any(), any());
+            verify(reservedSpaceService).get(eq("user@university.edu"), any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any());
         }
     }
     
