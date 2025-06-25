@@ -20,14 +20,16 @@ public interface ReservedHardwareRepository extends JpaRepository<ReservedHardwa
 
     /**
      * Retrieves the history of reserved hardware items based on the provided filters.
-     * @param email     Email of the user requesting the history.
-     * @param nameLike  Partial name of the hardware item to search for (optional).
-     * @param type      Type of the hardware item (optional).
-     * @param building  Building number where the hardware was located (optional).
-     * @param startDate Start date for the reservation period (optional).
-     * @param endDate   End date for the reservation period (optional).
-     * @param pageable  Pagination information.
-     * @return          List of reserved hardware items matching the filters.
+     * @param email        Email of the user requesting the history.
+     * @param nameLike     Partial name of the hardware item to search for (optional).
+     * @param type         Type of the hardware item (optional).
+     * @param building     Building number where the hardware was located (optional).
+     * @param startDate    Start date for the reservation period (optional).
+     * @param endDate      End date for the reservation period (optional).
+     * @param isHandedOver Flag to indicate if the hardware has been handed over (optional, show both if not provided).
+     * @param getReserved  Flag to indicate if the hardware has been reserved (optional, show both if not provided).
+     * @param pageable     Pagination information.
+     * @return             List of reserved hardware items matching the filters.
      */
     @Query(
         value = """
@@ -45,7 +47,15 @@ public interface ReservedHardwareRepository extends JpaRepository<ReservedHardwa
                 AND (:type IS NULL OR hw.type_hardware = :type)
                 AND (:building IS NULL OR sh.building_storedhw = :building)
                 AND (CAST(:startDate AS TIMESTAMP) IS NULL OR rh.start_reshw >= CAST(:startDate AS TIMESTAMP))
-                AND (CAST(:endDate AS TIMESTAMP) IS NULL OR rh.end_reshw <= CAST(:endDate AS TIMESTAMP));
+                AND (CAST(:endDate AS TIMESTAMP) IS NULL OR rh.end_reshw <= CAST(:endDate AS TIMESTAMP))
+                AND (:isHandedOver IS NULL
+                    OR (:isHandedOver = TRUE AND handover_reshw IS NOT NULL)
+                    OR (:isHandedOver = FALSE AND handover_reshw IS NULL)
+                )
+                AND (:isReturned IS NULL
+                    OR (:isReturned = TRUE AND return_reshw IS NOT NULL)
+                    OR (:isReturned = FALSE AND return_reshw IS NULL)
+                )
         """,
         nativeQuery = true
     )
@@ -56,6 +66,8 @@ public interface ReservedHardwareRepository extends JpaRepository<ReservedHardwa
         Short building,
         Instant startDate,
         Instant endDate,
+        Boolean isHandedOver,
+        Boolean isReturned,
         Pageable pageable
     );
 

@@ -188,17 +188,19 @@ public class OperationQueryController {
 
     /**
      * Retrieves the history of reserved hardware items based on the provided filters.
-     * @param email     Email of the user making the request (optional for ADMIN, required).
-     * @param nameLike  Partial name of the hardware item to search for (optional).
-     * @param type      Type of the hardware item (optional).
-     * @param building  Building number where the hardware was located (optional).
-     * @param startDate Start date for the reservation period (optional).
-     * @param endDate   End date for the reservation period (optional).
-     * @param qSize     Number of reservations to retrieve per page.
-     * @param qPage     Page number to retrieve.
-     * @param orderBy   Field to order the results by (optional).
-     * @param ascOrder  Flag to indicate if the results should be ordered in ascending order (assumed true).
-     * @return          List of reserved hardware items matching the filters.
+     * @param email        Email of the user making the request (optional for ADMIN, required).
+     * @param nameLike     Partial name of the hardware item to search for (optional).
+     * @param type         Type of the hardware item (optional).
+     * @param building     Building number where the hardware was located (optional).
+     * @param startDate    Start date for the reservation period (optional).
+     * @param endDate      End date for the reservation period (optional).
+     * @param isHandedOver Flag to indicate if the item has been handed over (optional, show both if not provided).
+     * @param isReturned   Flag to indicate if the item has been returned (optional, show both if not provided).
+     * @param qSize        Number of reservations to retrieve per page.
+     * @param qPage        Page number to retrieve.
+     * @param orderBy      Field to order the results by (optional).
+     * @param ascOrder     Flag to indicate if the results should be ordered in ascending order (assumed true).
+     * @return             List of reserved hardware items matching the filters.
      */
     @GetMapping("/hardware")
     public ResponseEntity<?> getItemHistory(
@@ -208,6 +210,8 @@ public class OperationQueryController {
         @RequestParam(required = false) Short building,
         @RequestParam(required = false) Instant startDate,
         @RequestParam(required = false) Instant endDate,
+        @RequestParam(required = false) Boolean isHandedOver,
+        @RequestParam(required = false) Boolean isReturned,
         @RequestParam(defaultValue = "10") Integer qSize,
         @RequestParam(defaultValue = "0") Integer qPage,
         @RequestParam(required = false) String orderBy,
@@ -233,6 +237,8 @@ public class OperationQueryController {
                     building,
                     startDate,
                     endDate,
+                    isHandedOver,
+                    isReturned,
                     qSize,
                     qPage,
                     orderBy,
