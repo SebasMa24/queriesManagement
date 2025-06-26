@@ -15,6 +15,7 @@ import com.quantumdev.integraservicios.database.model.Building;
 import com.quantumdev.integraservicios.database.model.ScheduleEntry;
 import com.quantumdev.integraservicios.database.model.Space;
 import com.quantumdev.integraservicios.database.model.SpaceId;
+import com.quantumdev.integraservicios.database.repository.BuildingRepository;
 import com.quantumdev.integraservicios.database.repository.SpaceRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -28,7 +29,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SpaceService {
 
+    /** Repository for accessing space data */
     private final SpaceRepository spaceRepository;
+    /** Repository for accessing building data */
+    private final BuildingRepository buildingService;
 
     /**
      * Retrieves a list of spaces based on the provided criteria.
@@ -116,8 +120,12 @@ public class SpaceService {
      * @return         The space matching the provided keys or null if not found.
      */
     public Space getDetails(Short building, Short id) {
+        Building buildingEntity = this.buildingService.findById(building).orElse(null);
+        if (buildingEntity == null)
+            return null;
+
         SpaceId spaceId = SpaceId.builder()
-                            .building(Building.builder().code(building).build())
+                            .building(buildingEntity)
                             .code(id)
                             .build();
 

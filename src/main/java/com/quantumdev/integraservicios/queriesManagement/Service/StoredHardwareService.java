@@ -16,6 +16,7 @@ import com.quantumdev.integraservicios.database.model.StoredHardware;
 import com.quantumdev.integraservicios.database.model.StoredHardwareId;
 import com.quantumdev.integraservicios.database.model.Warehouse;
 import com.quantumdev.integraservicios.database.model.WarehouseId;
+import com.quantumdev.integraservicios.database.repository.BuildingRepository;
 import com.quantumdev.integraservicios.database.repository.StoredHardwareRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -29,7 +30,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class StoredHardwareService {
 
+    /** Repository for accessing stored hardware data */
     private final StoredHardwareRepository storedHardwareRepository;
+    /** Repository for accessing building data */
+    private final BuildingRepository buildingRepository;
 
     /**
      * Retrieves a list of stored hardware items based on the provided criteria.
@@ -115,9 +119,13 @@ public class StoredHardwareService {
      */
     public StoredHardware getDetails(Short building, Short warehouse, Short id) {
         // Retrieve the stored hardware item by its composite key.
+        Building buildingEntity = buildingRepository.findById(building).orElse(null);
+        if (buildingEntity == null)
+            return null;
+
         WarehouseId warehouseId = WarehouseId.builder()
                                     .code(warehouse)
-                                    .building(Building.builder().code(building).build())
+                                    .building(buildingEntity)
                                     .build();
         
         StoredHardwareId storedHardwareId = StoredHardwareId.builder()
