@@ -10,8 +10,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.quantumdev.integraservicios.database.model.Building;
 import com.quantumdev.integraservicios.database.model.ScheduleEntry;
 import com.quantumdev.integraservicios.database.model.StoredHardware;
+import com.quantumdev.integraservicios.database.model.StoredHardwareId;
+import com.quantumdev.integraservicios.database.model.Warehouse;
+import com.quantumdev.integraservicios.database.model.WarehouseId;
 import com.quantumdev.integraservicios.database.repository.StoredHardwareRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -100,6 +104,30 @@ public class StoredHardwareService {
                     endDate,
                     pageable
                 );
+    }
+
+    /**
+     * Retrieves the details of a specific stored hardware item by its composite key.
+     * @param building  The building number.
+     * @param warehouse The warehouse number.
+     * @param id        The ID of the stored hardware item.
+     * @return          The stored hardware item matching the provided keys or null if not found.
+     */
+    public StoredHardware getDetails(Short building, Short warehouse, Short id) {
+        // Retrieve the stored hardware item by its composite key.
+        WarehouseId warehouseId = WarehouseId.builder()
+                                    .code(warehouse)
+                                    .building(Building.builder().code(building).build())
+                                    .build();
+        
+        StoredHardwareId storedHardwareId = StoredHardwareId.builder()
+                                                .code(id)
+                                                .warehouse(Warehouse.builder().id(warehouseId).build())
+                                                .build();
+
+        return this.storedHardwareRepository
+                .findById(storedHardwareId)
+                .orElse(null);
     }
     
 }

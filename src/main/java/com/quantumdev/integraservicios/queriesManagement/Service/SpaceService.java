@@ -11,8 +11,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.quantumdev.integraservicios.database.model.Building;
 import com.quantumdev.integraservicios.database.model.ScheduleEntry;
 import com.quantumdev.integraservicios.database.model.Space;
+import com.quantumdev.integraservicios.database.model.SpaceId;
 import com.quantumdev.integraservicios.database.repository.SpaceRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -105,6 +107,23 @@ public class SpaceService {
                     endDate,
                     pageable
                 );
+    }
+
+    /**
+     * Retrieves the details of a specific space by its composite key.
+     * @param building The building number.
+     * @param id       The ID of the space.
+     * @return         The space matching the provided keys or null if not found.
+     */
+    public Space getDetails(Short building, Short id) {
+        SpaceId spaceId = SpaceId.builder()
+                            .building(Building.builder().code(building).build())
+                            .code(id)
+                            .build();
+
+        return this.spaceRepository
+                .findById(spaceId)
+                .orElse(null);
     }
     
 }
