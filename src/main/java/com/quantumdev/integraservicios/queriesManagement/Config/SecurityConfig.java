@@ -47,6 +47,8 @@ public class SecurityConfig {
                     .requestMatchers("/swagger-ui/**").permitAll()
                     .requestMatchers("/v3/api-docs/**").permitAll()
                     .requestMatchers("/api/domains/**").permitAll()
+                    .requestMatchers("/api/operations/hardware/availability").permitAll()
+                    .requestMatchers("/api/operations/space/availability").permitAll()
                     .requestMatchers("/api/operations/**").authenticated()
                     .requestMatchers("/api/resources/**").authenticated()
                     .anyRequest().hasAuthority(ERole.ROLE_ADMIN.name())
