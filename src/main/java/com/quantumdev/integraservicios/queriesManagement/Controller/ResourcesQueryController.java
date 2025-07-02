@@ -1,10 +1,10 @@
 package com.quantumdev.integraservicios.queriesManagement.Controller;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.quantumdev.integraservicios.database.model.StoredHardware;
 import com.quantumdev.integraservicios.queriesManagement.Service.SpaceService;
@@ -18,7 +18,7 @@ import lombok.RequiredArgsConstructor;
  * 
  * @author Nicolás Sabogal
  */
-@Controller
+@RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/resources")
 public class ResourcesQueryController {
