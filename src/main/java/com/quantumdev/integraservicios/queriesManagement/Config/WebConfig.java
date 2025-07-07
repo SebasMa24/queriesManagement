@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
+// import org.springframework.core.env.Environment;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
@@ -21,7 +21,7 @@ import lombok.RequiredArgsConstructor;
 public class WebConfig {
 
     /** The environment to access properties */
-    private final Environment environment;
+    // private final Environment environment;
 
     /**
      * Configures CORS settings for the application.
@@ -32,7 +32,8 @@ public class WebConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         return request -> {
             var configuration = new CorsConfiguration();
-            configuration.setAllowedOrigins(List.of(environment.getProperty("frontend.url")));
+            // configuration.setAllowedOrigins(List.of(environment.getProperty("frontend.url")));
+            configuration.setAllowedOriginPatterns(List.of("*"));
             configuration.setAllowedMethods(List.of("GET", "OPTIONS"));
             configuration.setAllowedHeaders(List.of("Authorization"));
             configuration.setAllowCredentials(true);
