@@ -78,7 +78,7 @@ public interface StoredHardwareRepository extends JpaRepository<StoredHardware, 
                 AND sh.warehouse_storedhw = rsh.warehouse_reshw
                 AND sh.code_storedhw = rsh.storedhw_reshw
             WHERE
-                sh.building_storedhw IS NULL
+                rsh.building_reshw IS NULL
                 AND (:nameLike IS NULL
                     OR h.name_hardware LIKE CONCAT('%', :nameLike, '%')
                 )
