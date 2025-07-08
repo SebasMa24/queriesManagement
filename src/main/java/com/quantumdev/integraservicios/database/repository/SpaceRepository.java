@@ -92,7 +92,7 @@ public interface SpaceRepository extends JpaRepository<Space, SpaceId> {
                 )
                 AND (:dayChar IS NULL
                     OR sp.schedule_space LIKE CONCAT('%', :dayChar, '%')
-                    AND CAST(SUBSTRING(sp.shcedule_space, POSITION(:dayChar IN sp.schedule_space) + 1, 2) AS INTEGER) <= EXTRACT(HOUR FROM CAST(:startDate AS TIMESTAMP))
+                    AND CAST(SUBSTRING(sp.schedule_space, POSITION(:dayChar IN sp.schedule_space) + 1, 2) AS INTEGER) <= EXTRACT(HOUR FROM CAST(:startDate AS TIMESTAMP))
                     AND CAST(SUBSTRING(sp.schedule_space, POSITION(:dayChar IN sp.schedule_space) + 4, 2) AS INTEGER) >= EXTRACT(HOUR FROM CAST(:endDate AS TIMESTAMP))
                 )
         """,

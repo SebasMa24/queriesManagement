@@ -89,9 +89,9 @@ public interface StoredHardwareRepository extends JpaRepository<StoredHardware, 
                     OR sh.building_storedhw = :building
                 )
                 AND (:dayChar IS NULL
-                    OR sh.schedule_storedhw LIKE CONCAT('%', :dayChar, '%')
-                    AND CAST(SUBSTRING(sh.schedule_storedhw, POSITION(:dayChar IN sh.schedule_storedhw) + 1, 2) AS INTEGER) <= EXTRACT(HOUR FROM CAST(:startDate AS TIMESTAMP))
-                    AND CAST(SUBSTRING(sh.schedule_storedhw, POSITION(:dayChar IN sh.schedule_storedhw) + 4, 2) AS INTEGER) >= EXTRACT(HOUR FROM CAST(:endDate AS TIMESTAMP))
+                    OR h.schedule_hardware LIKE CONCAT('%', :dayChar, '%')
+                    AND CAST(SUBSTRING(h.schedule_hardware, POSITION(:dayChar IN h.schedule_hardware) + 1, 2) AS INTEGER) <= EXTRACT(HOUR FROM CAST(:startDate AS TIMESTAMP))
+                    AND CAST(SUBSTRING(h.schedule_hardware, POSITION(:dayChar IN h.schedule_hardware) + 4, 2) AS INTEGER) >= EXTRACT(HOUR FROM CAST(:endDate AS TIMESTAMP))
                 )
         """,
         nativeQuery = true
