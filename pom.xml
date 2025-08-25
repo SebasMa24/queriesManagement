@@ -152,6 +152,13 @@
                     	<goals>
                         	<goal>report</goal>
                     	</goals>
+						<configuration>
+                			<formats>
+                    			<format>XML</format> <!-- Formato que Codacy necesita -->
+                    			<format>HTML</format>
+               			 	</formats>
+                			<outputDirectory>target/site/jacoco</outputDirectory>
+            			</configuration>
                 	</execution>
             	</executions>
         	</plugin>
