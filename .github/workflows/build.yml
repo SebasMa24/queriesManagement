@@ -38,7 +38,8 @@ jobs:
         run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=SebasMa24_queriesManagement
       - name: Send to Codacy
         run: |
-          docker run -v $(pwd):/src \
-          -e CODACY_PROJECT_TOKEN=${{ secrets.CODACY_PROJECT_TOKEN }} \
-          codacy/codacy-coverage-reporter report \
-          -l Java -r /src/target/site/jacoco/jacoco.xml
+          bash <(curl -Ls https://coverage.codacy.com/get.sh) report \
+            -l Java \
+            -r target/site/jacoco/jacoco.xml \
+            --commit-uuid ${{ github.sha }} \
+            --project-token ${{ secrets.CODACY_PROJECT_TOKEN }}
