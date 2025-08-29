@@ -43,3 +43,14 @@ jobs:
             -r target/site/jacoco/jacoco.xml \
             --commit-uuid ${{ github.sha }} \
             --project-token ${{ secrets.CODACY_PROJECT_TOKEN }}
+      - name: Install DeepSource CLI
+        run: curl https://deepsource.io/cli | sh
+
+      - name: Send coverage to DeepSource
+        env:
+          DEEPSOURCE_DSN: ${{ secrets.DEEPSOURCE_DSN }}
+        run: |
+          ./bin/deepsource report \
+            --analyzer test-coverage \
+            --key java \
+            --value-file target/site/jacoco/jacoco.xml
