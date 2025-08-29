@@ -1,11 +1,44 @@
 version = 1
 
+# Analizador principal de Java: estilo, bugs, code smells
 [[analyzers]]
 name = "java"
+enabled = true
 
   [analyzers.meta]
   runtime_version = "21"
 
-  [[analyzers]]
+# Cobertura de pruebas (lee jacoco.xml que mandas en GitHub Actions)
+[[analyzers]]
 name = "test-coverage"
 enabled = true
+
+# Detección de secretos (tokens, claves, passwords hardcodeadas)
+[[analyzers]]
+name = "secrets"
+enabled = true
+
+# Seguridad en el código (vulnerabilidades, SQL injection, XSS, etc.)
+[[analyzers]]
+name = "security"
+enabled = true
+
+# Buenas prácticas en dependencias y configuración
+[[analyzers]]
+name = "docker"
+enabled = true
+
+# Patrones comunes en configuraciones YAML (si usas workflows o configs en el repo)
+[[analyzers]]
+name = "yaml"
+enabled = true
+
+# Ignorar archivos generados o irrelevantes
+exclude_patterns = [
+  "target/**",
+  "**/node_modules/**",
+  "**/build/**",
+  "**/.mvn/**",
+  "**/test/**",
+  ".github/**"
+]
