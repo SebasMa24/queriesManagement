@@ -18,19 +18,9 @@ enabled = true
 name = "secrets"
 enabled = true
 
-# Seguridad en el código (vulnerabilidades, SQL injection, XSS, etc.)
-[[analyzers]]
-name = "security"
-enabled = true
-
 # Buenas prácticas en dependencias y configuración
 [[analyzers]]
 name = "docker"
-enabled = true
-
-# Patrones comunes en configuraciones YAML (si usas workflows o configs en el repo)
-[[analyzers]]
-name = "yaml"
 enabled = true
 
 # Ignorar archivos generados o irrelevantes
